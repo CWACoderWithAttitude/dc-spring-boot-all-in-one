@@ -1,0 +1,464 @@
+[
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 2,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Sky Team",
+    "typical_duration": 20
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Kosmos",
+    "title": "Catan",
+    "typical_duration": 120,
+    "author": "Klaus Teuber"
+  },
+  {
+    "ean13": "4002051699093",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 1,
+    "publisher": "Kosmos",
+    "title": "Catan, Das Würfelspiel",
+    "typical_duration": 30,
+    "author": "Klaus Teuber"
+  },
+  {
+    "ean13": "4007396025101",
+    "max_number_of_players": 5,
+    "min_age": 8,
+    "min_number_of_players": 2,
+    "publisher": "Amigo",
+    "title": "Piraten kapern",
+    "typical_duration": 30,
+    "author": "Haim Shafir"
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Z-Man Games",
+    "title": "Pandemic",
+    "typical_duration": 60
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 5,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Days of Wonder",
+    "title": "Ticket to Ride",
+    "typical_duration": 90
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 5,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Hans im Glück",
+    "title": "Carcassonne",
+    "typical_duration": 45
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 7,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Repos Production",
+    "title": "",
+    "typical_duration": 30
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Rio Grande Games",
+    "title": "Dominion",
+    "typical_duration": 30
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 8,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Czech Games Edition",
+    "title": "Codenames",
+    "typical_duration": 15
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Space Cowboys",
+    "title": "Splendor",
+    "typical_duration": 30
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 5,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "FryxGames",
+    "title": "Terraforming Mars",
+    "typical_duration": 120
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 5,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Pegasus Spiele",
+    "title": "Istanbul",
+    "typical_duration": 60
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "FX",
+    "title": "Torres",
+    "typical_duration": 120
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Kosmos",
+    "title": "Keltis - Der Weg der Steine",
+    "typical_duration": 30
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Kosmos",
+    "title": "Keltis - Neue Wege - Neue Ziele",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 5,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Pegasus Spiele",
+    "title": "Azul",
+    "typical_duration": 60
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Kosmos",
+    "title": "Siedler",
+    "typical_duration": 75
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Kosmos",
+    "title": "Siedler - Städte & Ritter",
+    "typical_duration": 120
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Pegasus Spiele",
+    "title": "Kingdomino",
+    "typical_duration": 30
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Kosmos",
+    "title": "Dampfross",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Blackdog",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Cranium",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Zug um Zug",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Zug um Zug2",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Andor",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Niagara",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Village",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Die Säulen der Erde",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Camel Cup",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Activity",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Tintenherz",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "",
+    "title": "Rush Hour",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Hans im Glück",
+    "title": "Thurn 6 Taxis",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Hans im Glück",
+    "title": "Thurn 6 Taxis, Glanz 6 Gloria",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Hans im Glück",
+    "title": "El Grande",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Ravensburger",
+    "title": "Scotland Yard, Junior",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0887961751062",
+    "max_number_of_players": 10,
+    "min_age": 7,
+    "min_number_of_players": 2,
+    "publisher": "Mattel",
+    "title": "Uno Flip!",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0887961617689",
+    "max_number_of_players": 6,
+    "min_age": 7,
+    "min_number_of_players": 2,
+    "publisher": "Mattel",
+    "title": "Phase 10",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "4260528094158",
+    "max_number_of_players": 6,
+    "min_age": 12,
+    "min_number_of_players": 2,
+    "publisher": "Mattel",
+    "title": "Stadt, Land, Vollpfosten",
+    "typical_duration": 60
+  },
+  {
+    "ean13": "0746775036744",
+    "max_number_of_players": 10,
+    "min_age": 7,
+    "min_number_of_players": 2,
+    "publisher": "Mattel",
+    "title": "Uno",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Kosmos",
+    "title": "Cascadia",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Jumbo",
+    "title": "Rummikub",
+    "typical_duration": 60
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Hasbro",
+    "title": "Spiel des Lebens",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Mattel",
+    "title": "Scrabble",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 4,
+    "min_age": 6,
+    "min_number_of_players": 2,
+    "publisher": "Haba",
+    "title": "Krawall vorm Stall",
+    "typical_duration": 40
+  },
+  {
+    "ean13": "4010350060261",
+    "max_number_of_players": 6,
+    "min_age": 8,
+    "min_number_of_players": 2,
+    "publisher": "Queen Games",
+    "title": "Der Palast von Alhambra",
+    "typical_duration": 60
+  },
+  {
+    "ean13": "0123456789123",
+    "max_number_of_players": 5,
+    "min_age": 8,
+    "min_number_of_players": 2,
+    "publisher": "Hans im Glück",
+    "title": "Carcassonne",
+    "typical_duration": 45
+  },
+  {
+    "ean13": "4010350603871",
+    "max_number_of_players": 6,
+    "min_age": 8,
+    "min_number_of_players": 2,
+    "publisher": "Queen Games",
+    "title": "Alhambra The Dice Game",
+    "typical_duration": 60
+  },
+  {
+    "ean13": "4010350603871",
+    "max_number_of_players": 8,
+    "min_age": 10,
+    "min_number_of_players": 2,
+    "publisher": "CGE - Czech Games Edition",
+    "title": "Codenames",
+    "typical_duration": 15
+  },
+  {
+    "ean13": "4250231731877",
+    "max_number_of_players": 6,
+    "min_age": 8,
+    "min_number_of_players": 1,
+    "publisher": "Pegasus Spiele",
+    "title": "Dorf Romantik",
+    "typical_duration": 60
+  }
+]

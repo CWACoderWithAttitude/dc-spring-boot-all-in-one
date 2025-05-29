@@ -1,0 +1,45 @@
+# config file for prometheus
+
+# global config
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager.local:9093']
+rule_files:
+  #- rules.yml
+  - alert_rules.yml
+  
+scrape_configs:
+# scrape config for the prometheus server itself
+- job_name: prometheus
+  honor_timestamps: true
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  metrics_path: /metrics
+  scheme: http
+  follow_redirects: true
+  enable_http2: true
+  static_configs:
+  - targets:
+    - localhost:9090
+
+# scrape config for the Spring Boot Actuator metrics endpoint
+- job_name: 'Spring-Boot Games-Service MSSQL API'
+  scrape_interval: 10s
+  metrics_path: /actuator/prometheus
+  static_configs:
+    - targets: ['games-service.local:8080']
+
+# this target doesn't exist and will trigger an alert
+- job_name: 'dummy_node'
+  static_configs:
+    - targets: ['localhost:1234']
+
+# metrics provided by node_exporter running on real hardware
+- job_name: 'host'
+  static_configs:
+    - targets: ['host.docker.internal:9100']

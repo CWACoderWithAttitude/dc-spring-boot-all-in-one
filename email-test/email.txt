@@ -1,0 +1,11 @@
+From: Fry <fry@planet-express.org>
+To: Dr. Zoidberg <zoidberg@planet-express.org>
+Subject: an example.com example email
+Date: Mon, 7 Nov 2016 08:45:16
+
+Dear Doctor,
+your shrimp treatment worked as promised.
+I feel much better already.
+
+Have a great day,
+Fry

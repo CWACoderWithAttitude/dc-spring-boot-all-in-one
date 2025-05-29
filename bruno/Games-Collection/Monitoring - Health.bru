@@ -1,0 +1,11 @@
+meta {
+  name: Monitoring - Health
+  type: http
+  seq: 9
+}
+
+get {
+  url: http://localhost:8088/actuator/health
+  body: none
+  auth: inherit
+}

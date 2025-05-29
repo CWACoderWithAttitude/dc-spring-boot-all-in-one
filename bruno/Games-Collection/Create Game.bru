@@ -1,0 +1,17 @@
+meta {
+  name: Create Game
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8088/games/new
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "title": "Die Siedler von Mittelerde"  
+  }
+}

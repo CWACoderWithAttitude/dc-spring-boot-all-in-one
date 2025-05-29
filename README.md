@@ -1,0 +1,312 @@
+# TL;DR {#_tldr}
+
+Concise setup to develop Spring Boot based apps. A bunch of standard
+tools are included to address all challenges when building a production
+ready web APIs.
+
+# What is this? {#_what_is_this}
+
+This is a devcontainer for building REST APIs with Spring Boot. It
+includes all the tools you need to build, test, monitor and deploy your
+app. The devcontainer is based on Docker and can be used with any IDE
+that supports Docker, like Visual Studio Code or JetBrains IDEs.
+
+# Whats inside? {#_whats_inside}
+
+To address some of the most relevant aspects of developing a REST
+service i've included several components.
+
+## Development {#_development}
+
+Develop your Service based on OpenJDK 17.
+
+For illustration I added an example REST-Service that manages data on
+games. This service exposes some technical metrics: JVM, Hibernate,
+Spring-Booot (Requests, Errors, etc.) and application specific metrics
+like the number of games in the database.
+
+> You can easyly change the JDK by choosing a different base image in
+> the `devcontainer.json` file. The current base image is
+> `mcr.microsoft.com/vscode/devcontainers/java:0-17`.
+
+## Persistence {#_persistence}
+
+Is implemented by MS SQL 2022.
+
+Use a diffenrent verison by selecting a different image in the
+`docker-compose.yml` file. The current image is
+`mcr.microsoft.com/mssql/server:2022-latest`.
+
+## Monitoring {#_monitoring}
+
+The devcontainer includes Prometheus, Grafana and Alertmanager to
+monitor your app
+
+### Prometheus {#_prometheus}
+
+is configured to scrape metrics from the app and from the host system
+
+### Grafana {#_grafana}
+
+is used to visualize the collected metrics. I preconfigured the
+datasource connection to prometheus. You only need to add a dashboard.
+For starters you can try [dashboard
+19004](https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/)
+
+### Alertmanager {#_alertmanager}
+
+is used to send notifications when an alert is triggered. Since you
+definitely want to be notified when your app is down or when something
+goes wrong, I added a simple alerting rule that will trigger an alert
+when the app is down. To keep it simple the alerts will be sent via
+email to a local mailtcatcher.
+
+### Mailcatcher {#_mailcatcher}
+
+can be reached at [http://localhost:1080](http://localhost:1080/) (You
+can test the email notification by sending a test email to the
+configured SMTP server.) This is an app that accepts SMTP mail
+connections.Received mails are shown in a web gui. This is a great way
+to test email notifications without having to set up a real SMTP server.
+
+## DB Frontend {#_db_frontend}
+
+## GUI {#_gui}
+
+To manage the database I added Adminer. Adminer is a lightweight
+database management tool that can be used to manage your database. It
+can be reached at
+[http://localhost:8010](http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo).
+Please lookup the DB password in the `.env` file
+
+## CLI {#_cli}
+
+In case you prefer CLI I included `mssql-tools`:
+
+> The DB password for the `sa` user is stored in the `.env` file as
+> `mssql_sa_password`. It's injected into the mssql-tools container in
+> docker-compoose as `MSSQL_PASSWORD`.
+
+``` bash
+docker exec -it mssql.local /bin/bash
+root@2f8bd524f7bf:/# sqlcmd -S mssql.local -U sa -P ${MSSQL_PASSWORD}
+1> SELECT name FROM master.dbo.sysdatabases
+2> go
+name
+-----
+master
+tempdb
+model
+msdb
+
+(4 rows affected)
+1> USE msdb
+2> go
+Changed database context to 'msdb'.
+
+1> SELECT top 5 id, title, ean13 FROM dbo.game WHERE title != "" and ean13 != ""
+2> go
+id      title              ean13
+--------------------------
+34 Catan, Das Würfelspiel 4002051699093
+52 Catan, Das Würfelspiel 4002051699093
+53 Catan, Das Würfelspiel 4002051699093
+54 Catan, Das Würfelspiel 4002051699093
+
+(4 rows affected)
+```
+
+## Components {#_components}
+
+Everything is done with containers: - Building an async FastAPI service
+backed by Postgresql - Testing using TDD and BDD - Monitoring with
+Prometheus - Alerting with Alertmanager - Visualizing collected metrics
+with Grafana - Adminer DB management - Mailcatcher to collect and show
+alert notifications
+
+So you can start building your service without having to install
+anything on your local machine - except Docker Desktop. I've not tested
+running with podman yet.
+
+## Why? {#_why}
+
+When developing a REST API you need to think about a lot of things. You
+need to think about how to test your code, how to monitor it, how to
+deploy it and how to make sure it runs in a container. This is a lot of
+stuff to think about. So I thought it would be a good idea to build a
+full blown REST API that covers all these topics. The goal is to show
+you how to do all this stuff in a simple way. The goal is not to build
+the best API ever.
+
+## Why devcontainers? {#_why_devcontainers}
+
+We all know \"Works on my machine\" is a bad slogan. What if \"works on
+my machine\" simply means: great - ship it. What if we could turn
+\"works on my machine\" into \"works in a container\"? An envirnment
+that is consistent regardless of the host system. I want to show you why
+we should embrace the slogan \"It works on my machine\". Using
+devcontainers it is easy to build your product in an environment that's
+pretty close to your prod env. Let's face it - we all have different
+machines and different setups. When using containers starting from day
+one you can be suree == Branching I'll split the implementation into
+multiple parts. Each part in its own branch - so you can skip any part
+you don't want to see. The branches will be named after the part they
+represent. The branches are:
+
+- `phase-0`: Basic FastAPI app with all dependencies, a simple GET
+  endpoint and test code. A Makefile is included to show how to run the
+  tests and stuff. A Pipeline is included to run the tests on every
+  commit. Coverage reports are generated and published to [github
+  pages](https://cwacoderwithattitude.github.io/articles_dc_fastapi_startrek/).
+
+- `crud`: Add a simple CRUD API to the app. This will allow us to
+  create, read, update and delete data on ships from the Startrek
+  universe. The data will be stored in a SQLite database. Our test
+  coverage enables us to refactor our code without any doubt on correct
+  functionality.
+
+  - replaced sqlite with a PostgreSQL db.
+
+  - added DB Adminer to provide a used friendly interface to the
+    database.
+
+  - added scripts to show how to test the API with
+    [httpyac](https://github.com/AnWeber/vscode-httpyac) and Bruno.
+
+- `monitoring`: Add monitoring to the app.
+
+  - At first we'll have the app export metrics for
+    [Prometheus](https://prometheus.io/)
+
+  - Next we'll add prometheus to our setup and configure it to scrape
+    metrics from our app and from prometheus itself
+
+    - Prometheus is configured to reread its config w/o restart. Please
+      refer to bruno collection for details.
+
+# Monitoring {#_monitoring_2}
+
+- The main FastAPI app exports prometheus metrics.
+
+- Metrics are collected by prometheus which runs in its own container.
+
+  - In addtion to application metrics the host system runs node_exporter
+    to export metrics of the system that runs the app stack
+
+- I implemented a simple alerting rule to show how to use alerting in
+  prometheus. The example rule will kick in when one of the monitored
+  containers is down. Alertmananger wil send a notification via email.
+  The test notification can be seen in
+  [mailcatcher](http://localhost:1080).
+
+- Grafana is used to show dashboards visualizing the collected metrics.
+
+prometheus.yml implements monitoring for the main FastAPI app.
+
+# Developement {#_developement}
+
+In general i'll stick to building the API in a TDD way. Tests are
+written in [pytest](https://docs.pytest.org/en/stable/).
+
+Implementation of
+[pytest-bdd](https://pytest-bdd.readthedocs.io/en/stable/) shows how to
+write business driven tests. Please refer to `get_ship.feature` and its
+implementation `get_ship.py` for details. Instead of using
+[behave](https://behave.readthedocs.io/en/latest/) i decided
+
+# Project Links {#_project_links}
+
+- [Swagger UI](http://localhost:8000/docs)
+
+- [ReDoc](http://localhost:8000/redoc)
+
+- [DB
+  Adminer](http://localhost:8010/?pgsql=startrek_db&username=star&db=star-trek-db&ns=public)
+
+- [Prometheus Targets](http://localhost:8090/targets) Check scraping
+  metrics from endpoints is OK
+
+- [Grafana](http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser)
+
+- [AlertManager](http://localhost:9093/#/alerts)
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [Swagger UI](http://localhost:8000/docs) OpenAPI aka Swagger                                                                                                                                                                                                                         | OK        |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [ReDoc](http://localhost:8000/redoc)                                                                                                                                                                                                                                                 | OK        |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [DB Adminer](http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo&) DB Admin Frontend                                                                                                                                                                                 | OK        |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [Prometheus Targets](http://localhost:8090/targets) Check scraping metrics from endpoints is healthy                                                                                                                                                                                 | OK        |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [Prometheus \> All Requests \>                                                                                                                                                                                                                                                       | OK        |
+| POST](http://localhost:8090/query?g0.expr=http_requests_total%7Binstance%3D%22articles_dc_fastapi_startrek.local%3A8000%22%2C+method%3D%22POST%22%7D&g0.show_tree=1&g0.tab=graph&g0.range_input=1h&g0.res_type=auto&g0.res_density=medium&g0.display_mode=lines&g0.show_exemplars=0) |           |
+| All Post Requests                                                                                                                                                                                                                                                                    |           |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [Grafana](http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser) Visualize Metrics                                                                                                                                                                                      | OK        |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [AlertManager](http://localhost:8093/#/alerts)                                                                                                                                                                                                                                       | NOK       |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+| [Mailcatcher - Fake SMTP](http://localhost:1080) Apps may send SMTP Mails to Pot 1025                                                                                                                                                                                                | OK        |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
+
+# General Links {#_general_links}
+
+- [\@ArjanCodes](https://www.youtube.com/@ArjanCodes) is a great channel
+  to learn about FastAPI and Python in general.
+
+- [fastapi.tiangolo.com](https://fastapi.tiangolo.com/) is the official
+  documentation for FastAPI.
+
+- [Bruno](https://www.usebruno.com) makes a fine replacement for
+  Postman, Insomnia and other API testing tools.
+
+- <https://medium.com/@imyounas/setting-up-kind-kubernetes-cluster-with-prometheus-grafana-and-k6-for-monitoring-and-stress-14d658c4e66e>
+  \[Setting up kind Kubernetes cluster with Prometheus, Grafana and K6
+  for monitoring and stress testing\] - a great article on how to set up
+  a kind cluster with prometheus and grafana.
+
+I miss to list to many great articles of outstanding authors - just
+because i was in a hurry or too lazy to keep a note. If you have a great
+article that you think should be listed here please let me know.
+
+# ToDos {#_todos}
+
+- [Test Guhub Actions
+  locally](https://www.freecodecamp.org/news/how-to-run-github-actions-locally/s)
+  w act
+
+- Integrate alerting into the setup. This will be done with
+
+  - [[AlertManager](https://prometheus.io/docs/alerting/latest/alertmanager/)]{.line-through}
+    and
+
+  - [Grafana
+    Alerting](https://grafana.com/docs/grafana/latest/alerting/notifications/)
+    and
+
+  - [[Send email alerts using Prometheus Alert
+    Manager](https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4)]{.line-through}
+
+- [Add [fake smtp](https://github.com/haravich/fake-smtp-server) server
+  to enanble local test of alertmanager and grafana]{.line-through}
+
+- Add [Caching in FastAPI: Unlocking High-Performance
+  Development](https://dev.to/sivakumarmanoharan/caching-in-fastapi-unlocking-high-performance-development-20ej)
+
+- Add [Spring Boot CRUD Example with
+  PostgreSQL](https://rameshfadatare.medium.com/spring-boot-crud-example-with-postgresql-926c87f0129a0)
+
+- Integrate Keycloak for authentication and authorization
+
+- Run app on Firebase
+
+- Depoloy app on AWS using CDK and AWS Lambda
+
+- Add Kong API Gateway
+
+- Convert ASCIIDOC to Markdown
+
+  - Either [Downdoc](https://github.com/opendevise/downdock) or
+
+  - Pa

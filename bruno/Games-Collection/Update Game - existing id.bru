@@ -1,0 +1,18 @@
+meta {
+  name: Update Game - existing id
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:8088/games/new
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": 11602,
+    "title": "Die Siedler von Mittelerde, Updated1"  
+  }
+}

@@ -1,0 +1,4 @@
+# https://coverage.readthedocs.io/en/latest/source.html
+[run]
+omit = 
+    test_*.py

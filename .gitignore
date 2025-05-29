@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+**/target
+# Virtual environments
+.venv
+htmlcov/
+.coverage
+coverage.xml
+startrek-ships.db
+frontends/
+junit/test-results.xml
+article.xml
+README.xml

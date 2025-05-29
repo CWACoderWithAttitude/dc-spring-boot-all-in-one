@@ -1,0 +1,48 @@
+{
+  "name": "dc-games-service",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "customizations": {
+    // Configure properties specific to VS Code.
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "files.eol": "\n",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "git.rebaseWhenSync": true,
+        "remote.restoreForwardedPorts": false,
+        "remote.autoForwardPorts": false,
+        "typescript.preferences.quoteStyle": "single"
+      },
+      "extensions": [
+        "PKief.material-icon-theme",
+        "anweber.vscode-httpyac",
+        "asciidoctor.asciidoctor-vscode",
+        "GitHub.vscode-github-actions",
+        "ritwickdey.LiveServer",
+        "qwtel.sqlite-viewer",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.makefile-tools",
+        "GitHub.copilot-chat",
+        "cweijan.vscode-myssql-client2",
+        "redhat.vscode-xml"
+      ]
+    }
+  },
+  "service": "games-service",
+  "workspaceFolder": "/src/",
+  "remoteUser": "vscode",
+  "postCreateCommand": "",
+  "postStartCommand": "", //"make dev && ptw main.py test_*.py",
+  "shutdownAction": "stopCompose",
+  "features": {
+    // Allow the devcontainer to run host docker commands, see https://github.com/devcontainers/templates/tree/main/src/docker-outside-of-docker
+    // from https://stackoverflow.com/questions/61696029/docker-in-docker-setup-with-vscode-dev-containers-how-to-access-running-docker
+    //"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    //"ghcr.io/devcontainers-extra/features/maven-sdkman:2": {
+    //  "jdkVersion": "17"
+    //}
+  }
+}
