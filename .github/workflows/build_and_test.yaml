@@ -2,8 +2,8 @@ name: build and test spring-api
 
 on:
   push:
-    branches:
-    - main
+#    branches:
+#    - main
 
 jobs:
   build-deploy:
