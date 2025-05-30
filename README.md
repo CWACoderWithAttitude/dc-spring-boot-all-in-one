@@ -1,22 +1,26 @@
-# TL;DR {#_tldr}
+# Dev Container for Spring Boot Web Service Development {#_dev_container_for_spring_boot_web_service_development}
+
+DevContainer for Spring Boot development.
+
+## TL;DR {#_tldr}
 
 Concise setup to develop Spring Boot based apps. A bunch of standard
-tools are included to address all challenges when building a production
+tools is included to address all challenges when building a production
 ready web APIs.
 
-# What is this? {#_what_is_this}
+## What is this? {#_what_is_this}
 
 This is a devcontainer for building REST APIs with Spring Boot. It
 includes all the tools you need to build, test, monitor and deploy your
 app. The devcontainer is based on Docker and can be used with any IDE
 that supports Docker, like Visual Studio Code or JetBrains IDEs.
 
-# Whats inside? {#_whats_inside}
+## Whats inside? {#_whats_inside}
 
 To address some of the most relevant aspects of developing a REST
 service i've included several components.
 
-## Development {#_development}
+### Development {#_development}
 
 Develop your Service based on OpenJDK 17.
 
@@ -25,11 +29,11 @@ games. This service exposes some technical metrics: JVM, Hibernate,
 Spring-Booot (Requests, Errors, etc.) and application specific metrics
 like the number of games in the database.
 
-> You can easyly change the JDK by choosing a different base image in
+> You can easily change the JDK by choosing a different base image in
 > the `devcontainer.json` file. The current base image is
 > `mcr.microsoft.com/vscode/devcontainers/java:0-17`.
 
-## Persistence {#_persistence}
+### Persistence {#_persistence}
 
 Is implemented by MS SQL 2022.
 
@@ -37,23 +41,23 @@ Use a diffenrent verison by selecting a different image in the
 `docker-compose.yml` file. The current image is
 `mcr.microsoft.com/mssql/server:2022-latest`.
 
-## Monitoring {#_monitoring}
+### Monitoring {#_monitoring}
 
 The devcontainer includes Prometheus, Grafana and Alertmanager to
 monitor your app
 
-### Prometheus {#_prometheus}
+#### Prometheus {#_prometheus}
 
 is configured to scrape metrics from the app and from the host system
 
-### Grafana {#_grafana}
+#### Grafana {#_grafana}
 
 is used to visualize the collected metrics. I preconfigured the
 datasource connection to prometheus. You only need to add a dashboard.
 For starters you can try [dashboard
 19004](https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/)
 
-### Alertmanager {#_alertmanager}
+#### Alertmanager {#_alertmanager}
 
 is used to send notifications when an alert is triggered. Since you
 definitely want to be notified when your app is down or when something
@@ -61,7 +65,7 @@ goes wrong, I added a simple alerting rule that will trigger an alert
 when the app is down. To keep it simple the alerts will be sent via
 email to a local mailtcatcher.
 
-### Mailcatcher {#_mailcatcher}
+#### Mailcatcher {#_mailcatcher}
 
 can be reached at [http://localhost:1080](http://localhost:1080/) (You
 can test the email notification by sending a test email to the
@@ -69,17 +73,20 @@ configured SMTP server.) This is an app that accepts SMTP mail
 connections.Received mails are shown in a web gui. This is a great way
 to test email notifications without having to set up a real SMTP server.
 
-## DB Frontend {#_db_frontend}
+### DB Frontend {#_db_frontend}
 
-## GUI {#_gui}
+To make is as easy for you as possible i included difffent ways to peek
+into the datase. One is a web based GUI, the other is a CLI tool.
 
-To manage the database I added Adminer. Adminer is a lightweight
-database management tool that can be used to manage your database. It
-can be reached at
+### GUI {#_gui}
+
+Adminer is a web based DB management tool that can be used to manage
+your database. It can be reached at
 [http://localhost:8010](http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo).
-Please lookup the DB password in the `.env` file
+Please lookup the DB password fron [.env](file://.devcontainer/.env)
+file - look out for property `mssql_sa_password`.
 
-## CLI {#_cli}
+### CLI {#_cli}
 
 In case you prefer CLI I included `mssql-tools`:
 
@@ -116,7 +123,7 @@ id      title              ean13
 (4 rows affected)
 ```
 
-## Components {#_components}
+### Components {#_components}
 
 Everything is done with containers: - Building an async FastAPI service
 backed by Postgresql - Testing using TDD and BDD - Monitoring with
@@ -128,7 +135,7 @@ So you can start building your service without having to install
 anything on your local machine - except Docker Desktop. I've not tested
 running with podman yet.
 
-## Why? {#_why}
+### Why? {#_why}
 
 When developing a REST API you need to think about a lot of things. You
 need to think about how to test your code, how to monitor it, how to
@@ -138,7 +145,7 @@ full blown REST API that covers all these topics. The goal is to show
 you how to do all this stuff in a simple way. The goal is not to build
 the best API ever.
 
-## Why devcontainers? {#_why_devcontainers}
+### Why devcontainers? {#_why_devcontainers}
 
 We all know \"Works on my machine\" is a bad slogan. What if \"works on
 my machine\" simply means: great - ship it. What if we could turn
@@ -184,7 +191,7 @@ represent. The branches are:
     - Prometheus is configured to reread its config w/o restart. Please
       refer to bruno collection for details.
 
-# Monitoring {#_monitoring_2}
+## Monitoring {#_monitoring_2}
 
 - The main FastAPI app exports prometheus metrics.
 
@@ -203,7 +210,7 @@ represent. The branches are:
 
 prometheus.yml implements monitoring for the main FastAPI app.
 
-# Developement {#_developement}
+## Developement {#_developement}
 
 In general i'll stick to building the API in a TDD way. Tests are
 written in [pytest](https://docs.pytest.org/en/stable/).
@@ -214,7 +221,7 @@ write business driven tests. Please refer to `get_ship.feature` and its
 implementation `get_ship.py` for details. Instead of using
 [behave](https://behave.readthedocs.io/en/latest/) i decided
 
-# Project Links {#_project_links}
+## Project Links {#_project_links}
 
 - [Swagger UI](http://localhost:8000/docs)
 
@@ -250,7 +257,7 @@ implementation `get_ship.py` for details. Instead of using
 | [Mailcatcher - Fake SMTP](http://localhost:1080) Apps may send SMTP Mails to Pot 1025                                                                                                                                                                                                | OK        |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+
 
-# General Links {#_general_links}
+## General Links {#_general_links}
 
 - [\@ArjanCodes](https://www.youtube.com/@ArjanCodes) is a great channel
   to learn about FastAPI and Python in general.
@@ -270,7 +277,7 @@ I miss to list to many great articles of outstanding authors - just
 because i was in a hurry or too lazy to keep a note. If you have a great
 article that you think should be listed here please let me know.
 
-# ToDos {#_todos}
+## ToDos {#_todos}
 
 - [Test Guhub Actions
   locally](https://www.freecodecamp.org/news/how-to-run-github-actions-locally/s)

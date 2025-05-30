@@ -26,26 +26,19 @@ public class GameUploadController {
 
     @PostMapping(consumes = { "multipart/form-data", "application/json" })
     public ResponseEntity<String> uploadGames(
-            @RequestParam(value = "file", required = false) MultipartFile file,
+            // @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestBody(required = false) List<Game> gamesFromBody) {
 
-        try {
-            List<Game> games;
-            if (file != null && !file.isEmpty()) {
-                ObjectMapper mapper = new ObjectMapper();
-                games = mapper.readValue(file.getInputStream(), new TypeReference<List<Game>>() {
-                });
-            } else if (gamesFromBody != null) {
-                games = gamesFromBody;
-            } else {
-                return ResponseEntity.badRequest().body("No file or JSON body provided.");
-            }
-            games.forEach(gameService::save);
-            logger.info("Uploaded and saved " + games.size() + " games.");
-            return ResponseEntity.ok("Successfully uploaded and saved " + games.size() + " games.");
-        } catch (IOException e) {
-            logger.warning("Failed to upload games: " + e.getMessage());
-            return ResponseEntity.badRequest().body("Failed to process file: " + e.getMessage());
+        List<Game> games;
+
+        if (gamesFromBody != null) {
+            games = gamesFromBody;
+        } else {
+            return ResponseEntity.badRequest().body("No file or JSON body provided.");
         }
+        games.forEach(gameService::save);
+        logger.info("Uploaded and saved " + games.size() + " games.");
+        return ResponseEntity.ok("Successfully uploaded and saved " + games.size() + " games.");
+
     }
 }

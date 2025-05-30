@@ -1,26 +1,15 @@
-= DevConttainer for Spring Boot
+= Dev Container for Spring Boot Web Service Development
+Volker Benders
+:toc:
 DevContainer for Spring Boot development.
 
-:toc: macro
-:toclevels: 3
-:toc-title: Table of Contents
-:sectanchors:
-:sectlinks:
-:source-highlighter: rouge
-:icons: font
-:linkcss:
-:linkcss: true
-:toc-placement: preamble
-:toc-mode: macro
-:toc-transition: slide
-
 == TL;DR
-Concise setup to develop Spring Boot based apps. A bunch of standard tools are included to address all challenges when building a production ready web APIs.
+Concise setup to cover all challenges of building production grade Spring Boot based REST services.
 
-== What is this?
+== What's inside?
 This is a devcontainer for building REST APIs with Spring Boot. It includes all the tools you need to build, test, monitor and deploy your app. The devcontainer is based on Docker and can be used with any IDE that supports Docker, like Visual Studio Code or JetBrains IDEs.
+This devcontainer is designed to help you build a REST API with Spring Boot. It includes a lot of tools and libraries that are commonly used in REST API development. The goal is to provide a complete setup that allows you to focus on building your API without having to worry about the underlying infrastructure.
 
-== Whats inside?
 To address some of the most relevant aspects of developing a REST service i've included several components.
 
 === Development
@@ -28,12 +17,18 @@ Develop your Service based on OpenJDK 17.
 
 For illustration I added an example REST-Service that manages data on games. This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
 
-> You can easyly change the JDK by choosing a different base image in the `devcontainer.json` file. The current base image is `mcr.microsoft.com/vscode/devcontainers/java:0-17`.
+=== Testing
 
+I ship my examples with https://www.usebruno.com[Bruno] collections. Please find the collections in the `bruno` folder. You can import them into Bruno by clicking on the `+` icon in the top left corner and selecting `Import Collection`.
+You can also use the `curl` commands in the `curl` folder to test the API. The `curl` commands are generated from the Bruno collections and can be used to test the API from the command line.
+
+> I really like Postmman, Insomnia and other API testing tools. But I think Bruno is a great alternative. It is fast, lightweight and has a lot of features that make it easy to test APIs. It also has a nice UI that makes it easy to use. I really like the fact that it is open source and can be used for free.
+
+And it does not require a login, registration or usage of cloud services.  
 === Persistence
-Is implemented by MS SQL 2022. 
 
-Use a diffenrent verison by selecting a different image in the `docker-compose.yml` file. The current image is `mcr.microsoft.com/mssql/server:2022-latest`.
+Is implemented by MS SQL 2022. 
+This setup ships with an empty database. Using Bruno you can easily create items or upload the a set of default games. By default the service default games are loaded from file:///./games-service/src/(resources/board-games.json[] on startup if the db is empty.
 
 === Monitoring
 The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app
@@ -42,8 +37,10 @@ The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your a
 is configured to scrape metrics from the app and from the host system
 
 ==== Grafana
-is used to visualize the collected metrics. I preconfigured the datasource connection to prometheus.
-You only need to add a dashboard. For starters you can try https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/[dashboard 19004]
+is used to visualize the collected metrics. This setup ships with a preconfigured datasource connection to prometheus.
+You only need to add a dashboard to show Spring boot metrics. For starters you can try https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/[dashboard 19004]:
+1. Open Grafana - default credentials are `admin`/`admin`: `.env` file contains the password.
+2. Login with the You can import this dashboard by clicking on the `+` icon in the left sidebar and selecting `Import`. Then paste the dashboard ID `19004` into the input field and click on `Load`. You can then select the Prometheus datasource and click on `Import`.
 
 ==== Alertmanager
 is used to send notifications when an alert is triggered. Since you definitely want to be notified when your app is down or when something goes wrong, I added a simple alerting rule that will trigger an alert when the app is down. To keep it simple the alerts will be sent via email to a local mailtcatcher.
@@ -54,16 +51,17 @@ This is an app that accepts SMTP mail connections.Received mails are shown in a 
 
 === DB Frontend
 
+To make is as easy for you as possible i included difffent ways to peek into the datase. One is a web based GUI, the other is a CLI tool.
+
 === GUI
 
-To manage the database I added Adminer. Adminer is a lightweight database management tool that can be used to manage your database. It can be reached at http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010]. Please lookup the DB password in the `.env` file
+Adminer is a web based DB management tool that can be used to manage your database. It can be reached at http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010]. Please lookup the DB password fron file://.devcontainer/.env[.env] file - look out for property `mssql_sa_password`.
 
 === CLI
 
 In case you prefer CLI I included `mssql-tools`:
 
 > The DB password for the `sa` user is stored in the `.env` file as `mssql_sa_password`. It's injected into the mssql-tools container in docker-compoose as `MSSQL_PASSWORD`.
-
 
 ```bash
 docker exec -it mssql.local /bin/bash
@@ -95,74 +93,20 @@ id      title              ean13
 ```
 
 
-
-=== Components
-
-Everything is done with containers:
-- Building an async FastAPI service backed by Postgresql
-- Testing using TDD and BDD
-- Monitoring with Prometheus
-- Alerting with Alertmanager
-- Visualizing collected metrics with Grafana
-- Adminer DB management
-- Mailcatcher to collect and show alert notifications
-
-So you can start building your service without having to install anything on your local machine - except Docker Desktop. I've not tested running with podman yet.
-
 === Why?
 When developing a REST API you need to think about a lot of things. You need to think about how to test your code, how to monitor it, how to deploy it and how to make sure it runs in a container. This is a lot of stuff to think about. So I thought it would be a good idea to build a full blown REST API that covers all these topics. The goal is to show you how to do all this stuff in a simple way. The goal is not to build the best API ever. 
 
 === Why devcontainers?
 We all know "Works on my machine" is a bad slogan. What if "works on my machine" simply means: great - ship it. What if we could turn "works on my machine" into "works in a container"? An envirnment that is consistent regardless of the host system.
 I want to show you why we should embrace the slogan "It works on my machine". Using devcontainers it is easy to build your product in an environment that's pretty close to your prod env. Let's face it - we all have different machines and different setups. When using containers starting from day one you can be suree 
-== Branching
-I'll split the implementation into multiple parts. Each part in its own branch - so you can skip any part you don't want to see.
-The branches will be named after the part they represent.
-The branches are:
-
-- `phase-0`: Basic FastAPI app with all dependencies, a simple GET endpoint and test code. A Makefile is included to show how to run the tests and stuff. A Pipeline is included to run the tests on every commit. Coverage reports are generated and published to https://cwacoderwithattitude.github.io/articles_dc_fastapi_startrek/[github pages].
-- `crud`: Add a simple CRUD API to the app. This will allow us to create, read, update and delete data on ships from the Startrek universe. The data will be stored in a SQLite database. Our test coverage enables us to refactor our code without any doubt on correct functionality.
-    * replaced sqlite with a PostgreSQL db.
-    * added DB Adminer to provide a used friendly interface to the database.
-    * added scripts to show how to test the API with https://github.com/AnWeber/vscode-httpyac[httpyac] and Bruno.
-- `monitoring`: Add monitoring to the app.
-    * At first we'll have the app export metrics for https://prometheus.io/[Prometheus]
-    * Next we'll add prometheus to our setup and configure it to scrape metrics from our app and from prometheus itself
-    ** Prometheus is configured to reread its config w/o restart. Please refer to bruno collection for details.
-
-//include::api-tests/bruno/startrek-ships/prometheus/prometheus_reread_config.bru[lines=8..8]    
-    
-== Monitoring
-- The main FastAPI app exports prometheus metrics.
-- Metrics are collected by prometheus which runs in its own container.
-    * In addtion to application metrics the host system runs node_exporter to export metrics of the system that runs the app stack
-- I implemented a simple alerting rule to show how to use alerting in prometheus. The example rule will kick in when one of the monitored containers is down. Alertmananger wil send a notification via email. The test notification can be seen in http://localhost:1080[mailcatcher].
-- Grafana is used to show dashboards visualizing the collected metrics.
-
-prometheus.yml implements monitoring for the main FastAPI app.
-
-== Developement
-In general i'll stick to building the API in a TDD way. Tests are written in https://docs.pytest.org/en/stable/[pytest].
-
-Implementation of https://pytest-bdd.readthedocs.io/en/stable/[pytest-bdd] shows how to write business driven tests. Please refer to `get_ship.feature` and its implementation `get_ship.py` for details.
-Instead of using https://behave.readthedocs.io/en/latest/[behave] i decided 
-
 
 == Project Links
-- http://localhost:8000/docs[Swagger UI]
-- http://localhost:8000/redoc[ReDoc]
-- http://localhost:8010/?pgsql=startrek_db&username=star&db=star-trek-db&ns=public[DB Adminer]
-- http://localhost:8090/targets[Prometheus Targets] Check scraping metrics from endpoints is OK
-- http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser[Grafana]
-- http://localhost:9093/#/alerts[AlertManager]
 
 [cols="5,1"]  
 |===
-| http://localhost:8000/docs[Swagger UI] OpenAPI aka Swagger ^| OK
-| http://localhost:8000/redoc[ReDoc] ^| OK
-| http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo&[DB Adminer] DB Admin Frontend ^| OK
+| http://localhost:8088/swagger-ui/index.html[OpenAPI aka Swagger] ^| OK
+| http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010] DB Admin Frontend ^| OK
 | http://localhost:8090/targets[Prometheus Targets] Check scraping metrics from endpoints is healthy ^| OK 
-| http://localhost:8090/query?g0.expr=http_requests_total%7Binstance%3D%22articles_dc_fastapi_startrek.local%3A8000%22%2C+method%3D%22POST%22%7D&g0.show_tree=1&g0.tab=graph&g0.range_input=1h&g0.res_type=auto&g0.res_density=medium&g0.display_mode=lines&g0.show_exemplars=0[Prometheus > All Requests > POST] All Post Requests ^| OK 
 | http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser[Grafana] Visualize Metrics ^| OK
 | http://localhost:8093/#/alerts[AlertManager] ^| NOK
 | http://localhost:1080[Mailcatcher - Fake SMTP] Apps may send SMTP Mails to Pot 1025 ^| OK

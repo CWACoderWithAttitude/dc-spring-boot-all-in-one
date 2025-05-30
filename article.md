@@ -1,10 +1,12 @@
-# TL;DR {#_tldr}
+# All-In-One Spring-Boot REST Service Development {#_all_in_one_spring_boot_rest_service_development}
+
+## TL;DR {#_tldr}
 
 Building production grade services takes more than just hacking code
 into your editor. This article and example project actually show how to
 address all major aspects.
 
-# What {#_what}
+## What {#_what}
 
 This article and the accompanying example project demonstrate how to
 build a production-grade REST service using Spring Boot. It covers

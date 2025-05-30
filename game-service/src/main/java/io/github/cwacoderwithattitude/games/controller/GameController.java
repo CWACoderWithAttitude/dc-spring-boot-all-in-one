@@ -44,7 +44,9 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of GET requests to /games/ endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        if (counter != null) {
+            counter.increment();
+        }
         return gameService.list();
     }
 
@@ -54,7 +56,9 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of GET requests to /games/{id} endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        if (counter != null) {
+            counter.increment();
+        }
         try {
             Game game = gameService.getById(Long.parseLong(id));
             if (game == null) {
@@ -74,7 +78,9 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of PUT requests to /games/{id} endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        if (counter != null) {
+            counter.increment();
+        }
         try {
             Game updatedGame = gameService.update(id, game);
             return ResponseEntity.ok(updatedGame);
@@ -89,7 +95,9 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of POST requests to /games/new endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        if (counter != null) {
+            counter.increment();
+        }
         logger.info(null == game ? "Game is null" : "Game: " + game);
         Game savedGame = gameService.save(game);
         return ResponseEntity.ok(savedGame);
