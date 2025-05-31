@@ -1,14 +1,18 @@
-= Dev Container for Spring Boot Web Service Development
+= https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one[Spring Boot All-In-One-Devcontainer]
 Volker Benders
 :toc:
 :toc-title: Table of Contents
 :imagesdir: ./images
-DevContainer for Spring Boot development.
+
+:description: DevContainer for Spring Boot development that gets you covered for all major challenges of building production grade REST services.
+:keywords: devcontainer, spring boot, rest api, production grade, monitoring, testing, persistence, mssql, prometheus, grafana, alertmanager, mailcatcher
+:revnumber: 0.1.0
+:revdate: 2024-05-28
 
 > This is an opinionated devcontainer for building REST APIs with Spring Boot. It is not meant to be a complete solution for all use cases, but rather a starting point that covers the most common challenges of building production grade REST services. If you have any suggestions or feedback, please let me know.
 
 == TL;DR
-Concise setup to cover all challenges of building production grade Spring Boot based REST services.
+DevContainer for Spring Boot development that gets you covered for all major challenges of building production grade REST services.
 
 == What's inside?
 This is a devcontainer for building REST APIs with Spring Boot. It includes all the tools you need to build, test, monitor and deploy your app. The devcontainer is based on Docker and can be used with any IDE that supports Docker, like Visual Studio Code or JetBrains IDEs.
