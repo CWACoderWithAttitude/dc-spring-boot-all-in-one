@@ -1,7 +1,11 @@
 = Dev Container for Spring Boot Web Service Development
 Volker Benders
 :toc:
+:toc-title: Table of Contents
+:imagesdir: ./images
 DevContainer for Spring Boot development.
+
+> This is an opinionated devcontainer for building REST APIs with Spring Boot. It is not meant to be a complete solution for all use cases, but rather a starting point that covers the most common challenges of building production grade REST services. If you have any suggestions or feedback, please let me know.
 
 == TL;DR
 Concise setup to cover all challenges of building production grade Spring Boot based REST services.
@@ -17,6 +21,9 @@ Develop your Service based on OpenJDK 17.
 
 For illustration I added an example REST-Service that manages data on games. This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
 
+To assist your journey of building high quality web services i added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
+image::games-jacoco-report.png[JaCoCo Report]
+
 === Testing
 
 I ship my examples with https://www.usebruno.com[Bruno] collections. Please find the collections in the `bruno` folder. You can import them into Bruno by clicking on the `+` icon in the top left corner and selecting `Import Collection`.
@@ -25,10 +32,12 @@ You can also use the `curl` commands in the `curl` folder to test the API. The `
 > I really like Postmman, Insomnia and other API testing tools. But I think Bruno is a great alternative. It is fast, lightweight and has a lot of features that make it easy to test APIs. It also has a nice UI that makes it easy to use. I really like the fact that it is open source and can be used for free.
 
 And it does not require a login, registration or usage of cloud services.  
+
 === Persistence
 
 Is implemented by MS SQL 2022. 
 This setup ships with an empty database. Using Bruno you can easily create items or upload the a set of default games. By default the service default games are loaded from file:///./games-service/src/(resources/board-games.json[] on startup if the db is empty.
+
 
 === Monitoring
 The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app
@@ -39,7 +48,7 @@ is configured to scrape metrics from the app and from the host system
 ==== Grafana
 is used to visualize the collected metrics. This setup ships with a preconfigured datasource connection to prometheus.
 You only need to add a dashboard to show Spring boot metrics. For starters you can try https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/[dashboard 19004]:
-1. Open Grafana - default credentials are `admin`/`admin`: `.env` file contains the password.
+1. Open Grafana - default credentials are `admin`/`admin`: `.env` file contains the default password -> GF_SECURITY_ADMIN_PASSWORD.
 2. Login with the You can import this dashboard by clicking on the `+` icon in the left sidebar and selecting `Import`. Then paste the dashboard ID `19004` into the input field and click on `Load`. You can then select the Prometheus datasource and click on `Import`.
 
 ==== Alertmanager

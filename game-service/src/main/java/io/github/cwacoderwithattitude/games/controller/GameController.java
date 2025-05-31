@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,7 @@ import io.github.cwacoderwithattitude.games.service.GameService;
 import io.github.cwacoderwithattitude.games.service.SeedDataReader;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.annotation.PostConstruct;
 
 @RestController
@@ -35,6 +37,7 @@ public class GameController {
     java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GameController.class.getName());
     @Autowired
     private MeterRegistry meterRegistry;
+
     @Value("classpath:board_games.json")
     Resource resource; // = new ClassPathResource("rules_of_acquisiton.json");
 
@@ -44,6 +47,8 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of GET requests to /games/ endpoint")
                 .register(meterRegistry);
+        // TODO this check is nescessary to avoid NullPointerException
+        // when meterRegistry is not initialized (e.g. in tests)
         if (counter != null) {
             counter.increment();
         }

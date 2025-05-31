@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,6 +28,7 @@ import io.github.cwacoderwithattitude.games.service.GameService;
 import io.github.cwacoderwithattitude.games.service.SeedDataReader;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 
 @WebMvcTest(GameController.class)
 class GameControllerTest {
@@ -42,21 +45,21 @@ class GameControllerTest {
     @MockitoBean
     private SeedDataReader seedDataReader;
 
+    @TestConfiguration
+    static class MeterRegistryConfig {
+        @Bean
+        public MeterRegistry meterRegistry() {
+            return new SimpleMeterRegistry();
+        }
+    }
+
     @BeforeEach
     void setup() {
-        Counter mockCounter = Mockito.mock(Counter.class);
-        Mockito.when(meterRegistry.counter(Mockito.anyString())).thenReturn(mockCounter);
-        Mockito.when(meterRegistry.counter(Mockito.anyString(), Mockito.anyList())).thenReturn(mockCounter);
-        // If you use Counter.builder(...).register(meterRegistry), mock the builder
-        // too:
-        // Mockito.mockStatic(Counter.class).when(() ->
-        // Counter.builder(Mockito.anyString()))
-        // .thenReturn(Mockito.mock(Counter.Builder.class, invocation -> {
-        // Counter.Builder builder = Mockito.mock(Counter.Builder.class,
-        // Mockito.RETURNS_SELF);
-        // Mockito.when(builder.register(Mockito.any())).thenReturn(mockCounter);
-        // return builder;
-        // }));
+        // If you want to mock the Counter directly, you can do it like this:
+        Counter counter = Counter.builder("api_games_list")
+                .description("a number of GET requests to /games/ endpoint")
+                .register(meterRegistry);
+        Mockito.when(meterRegistry.counter("api_games_list")).thenReturn(counter);
     }
 
     @Test

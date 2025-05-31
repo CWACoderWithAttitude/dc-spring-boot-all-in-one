@@ -1,0 +1,15 @@
+meta {
+  name: Upload Games from JSON File
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://localhost:8088/games/upload
+  body: file
+  auth: inherit
+}
+
+body:file {
+  file: @file(/Users/volker/Dev/volker/dev-container-repo/articles/dc-monitoring-spring-boot-mssql/game-service/src/main/resources/board_games.json) @contentType(application/json; charset=utf-8)
+}

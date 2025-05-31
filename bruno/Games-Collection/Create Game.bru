@@ -12,6 +12,32 @@ post {
 
 body:json {
   {
-    "title": "Die Siedler von Mittelerde"  
+      "ean13": "4002051699093",
+      "max_number_of_players": 4,
+      "min_age": 6,
+      "min_number_of_players": 1,
+      "publisher": "Kosmos",
+      "title": "Catan, Das Würfelspiel",
+      "typical_duration": 30,
+      "author": "Klaus Teuber",
+      "genre":"Würfelspiel"
+    }
+}
+
+assert {
+  res.status: eq 200
+}
+
+script:post-response {
+  function onResponse(res) {
+    let data = res.getBody();
+    bru.setVar("game_id", data.id);
   }
+  
+  onResponse(res);
+}
+
+tests {
+  const body = req.getBody()
+  expect (body).to.Be("itzelbritzel")
 }

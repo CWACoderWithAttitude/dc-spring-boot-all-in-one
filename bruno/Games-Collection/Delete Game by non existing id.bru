@@ -1,0 +1,15 @@
+meta {
+  name: Delete Game by non existing id
+  type: http
+  seq: 11
+}
+
+delete {
+  url: http://localhost:8088/games/47110815
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 404
+}
