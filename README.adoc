@@ -29,6 +29,45 @@ image::games-jacoco-report.png[JaCoCo Report]
 I ship my examples with https://www.usebruno.com[Bruno] collections. Please find the collections in the `bruno` folder. You can import them into Bruno by clicking on the `+` icon in the top left corner and selecting `Import Collection`.
 You can also use the `curl` commands in the `curl` folder to test the API. The `curl` commands are generated from the Bruno collections and can be used to test the API from the command line.
 
+There's a CLI tool to run collections, too:
+```
+❯ bru run . --reporter-html results.html
+Running Folder
+
+Create Game (200 ) - 71 ms
+   ✓ assert: res.status: eq 200
+   ✓ should return status 200 (OK)
+   ✓ id of the create game entity should be greater than 0
+Get all games (200 ) - 87 ms
+   ✓ assert: res.status: eq 200
+Get game by existing id (200 ) - 10 ms
+   ✓ assert: res.status: eq 200
+Get game by non-existing id (404 ) - 7 ms
+   ✓ assert: res.status: eq 404
+Update Game - existing id (200 ) - 16 ms
+Monitoring - Metrics (200 ) - 11 ms
+Monitoring - Info (200 ) - 2 ms
+Monitoring - Health (200 ) - 4 ms
+Delete Game by existing id (204 ) - 12 ms
+   ✓ assert: res.status: eq 204
+Delete Game by non existing id (404 ) - 9 ms
+   ✓ assert: res.status: eq 404
+Upload Games from JSON File (415 ) - 9 ms
+Update Game - non existing id (200 ) - 7 ms
+
+Requests:    12 passed, 12 total
+Tests:       2 passed, 2 total
+Assertions:  6 passed, 6 total
+Ran all requests - 245 ms
+
+Requests:    12 passed, 12 total
+Tests:       2 passed, 2 total
+Assertions:  6 passed, 6 total
+```
+
+image::bruno-cli-report.png[Bruno CLI Report]
+
+
 > I really like Postmman, Insomnia and other API testing tools. But I think Bruno is a great alternative. It is fast, lightweight and has a lot of features that make it easy to test APIs. It also has a nice UI that makes it easy to use. I really like the fact that it is open source and can be used for free.
 
 And it does not require a login, registration or usage of cloud services.  

@@ -38,6 +38,13 @@ script:post-response {
 }
 
 tests {
-  const body = req.getBody()
-  expect (body).to.Be("itzelbritzel")
+  test("should return status 200 (OK)", function () {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+   
+  test("id of the create game entity should be greater than 0", function () {
+    const data = res.getBody();
+    expect(data.id).to.be.gt(0);
+  });
 }
