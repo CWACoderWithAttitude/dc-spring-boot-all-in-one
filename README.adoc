@@ -20,6 +20,8 @@ This devcontainer is designed to help you build a REST API with Spring Boot. It 
 
 To address some of the most relevant aspects of developing a REST service i've included several components.
 
+
+
 === Development
 Develop your Service based on OpenJDK 17. 
 
@@ -96,7 +98,7 @@ You only need to add a dashboard to show Spring boot metrics. For starters you c
 
 ==== Alertmanager
 is used to send notifications when an alert is triggered. Since you definitely want to be notified when your app is down or when something goes wrong, I added a simple alerting rule that will trigger an alert when the app is down. To keep it simple the alerts will be sent via email to a local mailtcatcher.
-
+image::images/mailcatcher-alert-messages.png[Mailcatcher Alert Messages]
 ==== Mailcatcher
 can be reached at http://localhost:1080/[http://localhost:1080] (You can test the email notification by sending a test email to the configured SMTP server.)
 This is an app that accepts SMTP mail connections.Received mails are shown in a web gui. This is a great way to test email notifications without having to set up a real SMTP server.
@@ -160,17 +162,9 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
 | http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010] DB Admin Frontend ^| OK
 | http://localhost:8090/targets[Prometheus Targets] Check scraping metrics from endpoints is healthy ^| OK 
 | http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser[Grafana] Visualize Metrics ^| OK
-| http://localhost:8093/#/alerts[AlertManager] ^| NOK
+| http://localhost:8093/#/alerts[AlertManager] ^| OK
 | http://localhost:1080[Mailcatcher - Fake SMTP] Apps may send SMTP Mails to Pot 1025 ^| OK
 |=== 
-
-== General Links
-- https://www.youtube.com/@ArjanCodes[@ArjanCodes] is a great channel to learn about FastAPI and Python in general.
-- https://fastapi.tiangolo.com/[fastapi.tiangolo.com] is the official documentation for FastAPI.
-- https://www.usebruno.com[Bruno] makes a fine replacement for Postman, Insomnia and other API testing tools.
-- https://medium.com/@imyounas/setting-up-kind-kubernetes-cluster-with-prometheus-grafana-and-k6-for-monitoring-and-stress-14d658c4e66e [Setting up kind Kubernetes cluster with Prometheus, Grafana and K6 for monitoring and stress testing] - a great article on how to set up a kind cluster with prometheus and grafana.
-
-I miss to list to many great articles of outstanding authors - just because i was in a hurry or too lazy to keep a note. If you have a great article that you think should be listed here please let me know.
 
 == ToDos
 - https://www.freecodecamp.org/news/how-to-run-github-actions-locally/s[Test Guhub Actions locally] w act
@@ -178,13 +172,12 @@ I miss to list to many great articles of outstanding authors - just because i wa
   * [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]# and 
   * https://grafana.com/docs/grafana/latest/alerting/notifications/[Grafana Alerting] and
   * [.line-through]#https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4[Send email alerts using Prometheus Alert Manager]#
-- [.line-through]#Add https://github.com/haravich/fake-smtp-server[fake smtp] server to enanble local test of alertmanager and grafana#
-- Add https://dev.to/sivakumarmanoharan/caching-in-fastapi-unlocking-high-performance-development-20ej[Caching in FastAPI: Unlocking High-Performance Development]
-- Add https://rameshfadatare.medium.com/spring-boot-crud-example-with-postgresql-926c87f0129a0[Spring Boot CRUD Example with PostgreSQL]
+
 - Integrate Keycloak for authentication and authorization
 - Run app on Firebase
 - Depoloy app on AWS using CDK and AWS Lambda
 - Add Kong API Gateway
-- Convert ASCIIDOC to Markdown
-  * Either https://github.com/opendevise/downdock[Downdoc] or
-  * Pa
+- Automate conversion of asciidoc 2 markdown
+
+  Makefile contains `generate_markdown: clean asciidoc2docbook docbook2md` to do exactly that.
+    It should be added to the build pipeline to generate the markdown file automatically...
