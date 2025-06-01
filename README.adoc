@@ -253,10 +253,10 @@ architecture-beta
 
     service db(database)[Database] in games_service
     service spring_boot(server)[Server] in games_service
-    service prometheus(server)[Prometheus] in api
-    service alert_manager(server)[Alertmanager] in api
-    service mailcatcher(server)[Mailcatcher] in api
-    service adminer(server)[Adminer] in api
+    service prometheus(server)[Prometheus] in games_service
+    service alert_manager(server)[Alertmanager] in games_service
+    service mailcatcher(server)[Mailcatcher] in games_service
+    service adminer(server)[Adminer] in games_service
 
     db:L -- R:server
     disk1:T -- B:server
