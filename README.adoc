@@ -197,11 +197,12 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
     It should be added to the build pipeline to generate the markdown file automatically...
 
 == Links
-=== Dev
+=== DevOps
 - https://learn.microsoft.com/de-de/java/openjdk/containers[Container-Bilder für den Microsoft Build von OpenJDK  
 - https://www.baeldung.com/spring-rest-openapi-documentation[Spring REST OpenAPI Documentation]
 - https://www.baeldung.com/spring-boot-prometheus[Spring Boot Prometheus]
-
+- https://medium.com/@AlexanderObregon/how-spring-boot-maps-environment-variables-to-configuration-properties-2ddc55e361ca[How Spring Boot Maps Environment Variables to Configuration Properties]
+- https://www.baeldung.com/spring-boot-mssql[Spring Boot with MS SQL]
 === Monitoring
 _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
 - https://prometheus.io/docs/alerting/latest/alertmanager/[Alertmanager]
@@ -209,6 +210,7 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
 === Writing
 - https://asciidoctor.org/docs/user-manual/[Asciidoctor User Manual]
 - https://docs.asciidoctor.org/diagram-extension/latest/diagrams/[Asciidoctor Diagram Extension]
+- https://gist.github.com/plamentotev/be495e81abd52dc10e7dd51fbb71dd8c/revisions[Asciidoctor Diagram - Ditaa, PlantUML, Graphviz, Mermaid, etc.]
 
 == Architecture
 === Ditaa
@@ -231,6 +233,7 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
 ----
 
 === Mermaid
+==== Sequence
 
 [source,mermaid]
 ....
@@ -239,4 +242,22 @@ sequenceDiagram
     participant Bob
     Alice->>Bob: Hello Bob, how are you?
     Bob-->>Alice: Great!
+....
+
+==== Sequence
+
+[source,mermaid]
+....
+architecture-beta
+    group api(cloud)[API]
+
+    service db(database)[Database] in api
+    service disk1(disk)[Storage] in api
+    service disk2(disk)[Storage] in api
+    service server(server)[Server] in api
+
+    db:L -- R:server
+    disk1:T -- B:server
+    disk2:T -- B:db
+
 ....
