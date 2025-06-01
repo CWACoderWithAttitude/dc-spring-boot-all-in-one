@@ -260,7 +260,7 @@ architecture-beta
     service server(server) in games_service
 
      service prometheus(prometheus)[Prometheus] in games_service
-    service grafana(grafana)[Grafana] in games_service
+    service grafana(devicon:grafana)[Grafana] in games_service
     service alert_manager(server)[Alertmanager] in games_service
     
     service mailcatcher(server)[Mailcatcher] in games_service
