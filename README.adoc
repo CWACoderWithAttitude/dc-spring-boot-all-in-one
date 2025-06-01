@@ -252,6 +252,10 @@ architecture-beta
     group games_service(cloud)[Games Service]
 
     service db(database)[Database] in games_service
+
+....
+
+```bash
     service spring_boot(spring-icon)[Spring Boot API-Server] in games_service
     service prometheus(prometheus)[Prometheus] in games_service
     service grafana(grafana)[Grafana] in games_service
@@ -265,7 +269,4 @@ architecture-beta
     spring_boot:L -- R:prometheus
     prometheus:L -- R:alert_manager
     alert_manager:T -- B:mailcatcher
-
-....
-
-
+```
