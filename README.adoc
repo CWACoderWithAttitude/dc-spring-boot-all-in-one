@@ -36,10 +36,10 @@ Develop your Service based on OpenJDK 17.
 For illustration I added an example REST-Service that manages data on games. 
 This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
 
-To assist your journey of building high quality web services i added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
+To assist your journey of building high quality web services i:
+- added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
 image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/what-the-heck/images/games-jacoco-report.png[JaCoCo Report]
-
-A basic build pipeline based on GitHub Actions is included. It runs the tests, builds the app and generates the JaCoCo report. The pipeline is triggered on every push to the main branch and on every pull request.
+- included a basic build pipeline based on GitHub Actions. It runs the tests, builds the app and generates the JaCoCo report. The pipeline is triggered on every push to the main branch and on every pull request.
 
 ==== Architecture Diagram
 
@@ -215,15 +215,15 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
 == ToDos
 - https://www.freecodecamp.org/news/how-to-run-github-actions-locally/s[Test Guhub Actions locally] w act
 - Integrate alerting into the setup. This will be done with 
-  * [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]#  and 
-  * https://grafana.com/docs/grafana/latest/alerting/notifications/[Grafana Alerting] and
-  * [.line-through]#https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4[Send email alerts using Prometheus Alert Manager]#
-
-- Integrate Keycloak for authentication and authorization
-- Run app on Firebase
-- Depoloy app on AWS using CDK and AWS Lambda
-- Add Kong API Gateway
-- Automate conversion of asciidoc 2 markdown
+  * [ ] - [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]#  and 
+  * [ ] - https://grafana.com/docs/grafana/latest/alerting/notifications/[Grafana Alerting] and
+  * [ ] - [.line-through]#https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4[Send email alerts using Prometheus Alert Manager]#
+- [ ] - publish JaCoCo Report 
+- [ ] - Integrate Keycloak for authentication and authorization
+- [ ] - Run app on Firebase
+- [ ] - Deploy app on AWS using CDK and AWS Lambda
+- [ ] - Add Kong API Gateway
+- [ ] - Automate conversion of asciidoc 2 markdown
 
   Makefile contains `generate_markdown: clean asciidoc2docbook docbook2md` to do exactly that.
     It should be added to the build pipeline to generate the markdown file automatically...
@@ -241,6 +241,8 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
 - https://prometheus.io/docs/alerting/latest/alertmanager/[Alertmanager]
 
 === Writing
+
+Documenation is provided in Asciidoc format.
 - https://asciidoctor.org/docs/user-manual/[Asciidoctor User Manual]
 - https://docs.asciidoctor.org/diagram-extension/latest/diagrams/[Asciidoctor Diagram Extension]
 - https://gist.github.com/plamentotev/be495e81abd52dc10e7dd51fbb71dd8c/revisions[Asciidoctor Diagram - Ditaa, PlantUML, Graphviz, Mermaid, etc.]
@@ -250,56 +252,4 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
 - https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-ditaa[Creating diagrams with Ditaa]
 - https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-graphviz[Creating diagrams with Graphviz]
 - https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-asciidoctor-diagram[Creating diagrams with Asciidoctor Diagram]
-== Architecture
-=== Ditaa
-[ditaa]
-----
-                         +-------------+
-                         |   Diagram   +----------------+
-                         |   Renderer  |                |
-                         +-------------+                |
-                         | Asciidoctor |                |
-                         |   Diagram   |                |
-                         +-------------+                | Image
-                                ^                       |
-                                | Diagram source        |
- +---------------+              |                       v
- |    Asciidoc   |       +------+------+        /-------+------\
- | with embedded +------>+ Asciidoctor +------->|   Beautiful  |
- |    diagram {d}|       +-------------+  HTML  |    Output    |
- +---------------+                              \--------------/
-----
-
-=== Ditaa2
-[ditaa]
-----
-                         +-------------+
-                         |   Diagram   +----------------+
-                         |   Renderer  |                |
-                         +-------------+                |
-                         | Asciidoctor |                |
-                         |   Diagram   |                |
-                         +-------------+                | Image
-                                ^                       |
-                                | Diagram source        |
- +---------------+              |                       v
- |    Asciidoc   |       +------+------+        /-------+------\
- | with embedded +------>+ Asciidoctor +------->|   Beautiful  |
- |    diagram {d}|       +-------------+  HTML  |    Output    |
- +---------------+                              \--------------/
-----
-
-
-=== Mermaid
-==== Sequence
-
-[source,mermaid]
-....
-sequenceDiagram
-    participant Alice
-    participant Bob
-    Alice->>Bob: Hello Bob, how are you?
-    Bob-->>Alice: Great!
-....
-
 

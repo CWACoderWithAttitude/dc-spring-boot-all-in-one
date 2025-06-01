@@ -2,10 +2,7 @@ services:
   
   games-service:
     image: mcr.microsoft.com/devcontainers/java:17
-    #image: mcr.microsoft.com/openjdk/jdk:17-mariner
     hostname: games-service.local
-    #env_file:
-    #  - .env
     volumes:
       -  ..:/src:cached
       -  $HOME/.m2:/home/vscode/.m2:cached
@@ -14,8 +11,9 @@ services:
     ports:
       - "${app_port}:8080"
       - "${app_debug_port}:8000"
-    #depends_on:
-    #  - startrek_db
+    depends_on:
+      - mssql
+      - prometheus
     command: >
       bash -c "sleep infinity"
     networks:
