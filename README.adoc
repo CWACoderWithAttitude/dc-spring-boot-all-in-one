@@ -258,7 +258,7 @@ architecture-beta
     group games_service(cloud)[Games Service]
 
     service db(database)[Database] in games_service
-    service server(server)[GamesAPIServer] in games_service
+    service apiserver(server)[GamesAPIServer] in games_service
 
     service prometheus(server)[Prometheus] in games_service
     service grafana(server)[Grafana] in games_service
@@ -267,8 +267,7 @@ architecture-beta
     service mailcatcher(server)[Mailcatcher] in games_service
     service adminer(server)[Adminer] in games_service
 
-    server:L -- R:db
-    db:L - R:adminer
+    apiserver:L -- R:db
 
 ....
 
