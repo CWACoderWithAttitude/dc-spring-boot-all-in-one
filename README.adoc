@@ -252,7 +252,7 @@ architecture-beta
     group games_service(cloud)[Games Service]
 
     service db(database)[Database] in games_service
-    service spring_boot(sprig-icon)[Spring Boot API-Server] in games_service
+    service spring_boot(spring-icon)[Spring Boot API-Server] in games_service
     service prometheus(prometheus)[Prometheus] in games_service
     service grafana(grafana)[Grafana] in games_service
     service alert_manager(server)[Alertmanager] in games_service
