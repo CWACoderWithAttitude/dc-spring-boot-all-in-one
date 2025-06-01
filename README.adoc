@@ -224,6 +224,8 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
 - [ ] - Deploy app on AWS using CDK and AWS Lambda
 - [ ] - Add Kong API Gateway
 - [ ] - Automate conversion of asciidoc 2 markdown
+- [ ] - addd appropriate icons to the architecture diagram
+- [ ] - fix test mocks for metrics and counters
 
   Makefile contains `generate_markdown: clean asciidoc2docbook docbook2md` to do exactly that.
     It should be added to the build pipeline to generate the markdown file automatically...
