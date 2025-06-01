@@ -252,9 +252,9 @@ architecture-beta
     group games_service(cloud)[Games Service]
 
     service db(database)[Database] in games_service
-    service spring_boot(server)[Server] in games_service
+    service spring_boot(API-Server)[Server] in games_service
     service prometheus(devicon:prometheus-wordmark)[Prometheus] in games_service
-    service grafana(devicon:devicon:grafana-wordmark)[Grafana] in games_service
+    service grafana(devicon:grafana-wordmark)[Grafana] in games_service
     service alert_manager(server)[Alertmanager] in games_service
     
     service mailcatcher(server)[Mailcatcher] in games_service
