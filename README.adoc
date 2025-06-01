@@ -244,14 +244,33 @@ sequenceDiagram
     Bob-->>Alice: Great!
 ....
 
-==== Sequence
+==== Architecture Diagram
+
+[source,mermaid]
+....
+architecture-beta
+    group games_service(cloud)[Games Service]
+
+    service db(database)[Database] in games_service
+    service spring_boot(server)[Server] in games_service
+    service prometheus(server)[Prometheus] in api
+    service alert_manager(server)[Alertmanager] in api
+    service mailcatcher(server)[Mailcatcher] in api
+    service adminer(server)[Adminer] in api
+
+    db:L -- R:server
+    disk1:T -- B:server
+    disk2:T -- B:db
+
+....
+
 
 [source,mermaid]
 ....
 architecture-beta
     group api(cloud)[API]
 
-    service db(database)[Database] in api
+    service db(database)[MSSQL DB] in api
     service disk1(disk)[Storage] in api
     service disk2(disk)[Storage] in api
     service server(server)[Server] in api
