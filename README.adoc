@@ -275,9 +275,9 @@ architecture-beta
     //service grafana(devicon:grafana)[devicon:grafana] in games_service
     //service grafana(devicon-plain:grafana)[devicon-plain:grafana] in games_service
     service grafana(devicon:grafana-wordmark)[devicon:grafana-wordmark] in games_service
-    service grafana(skill-icons:grafana-light)[skill-icons:grafana-light] in games_service
-    service grafana(logos:grafana)[logos:grafana] in games_service
-    service grafana(deviconskill-icons:grafana-dark)[skill-icons:grafana-dark] in games_service
+    // service grafana(skill-icons:grafana-light)[skill-icons:grafana-light] in games_service
+    // service grafana(logos:grafana)[logos:grafana] in games_service
+    // service grafana(deviconskill-icons:grafana-dark)[skill-icons:grafana-dark] in games_service
     
     group games_service(server)[Games Service-ICONs]
 
