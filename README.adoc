@@ -202,6 +202,7 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
 - https://www.baeldung.com/spring-rest-openapi-documentation[Spring REST OpenAPI Documentation]
 - https://www.baeldung.com/spring-boot-prometheus[Spring Boot Prometheus]
 - https://medium.com/@AlexanderObregon/how-spring-boot-maps-environment-variables-to-configuration-properties-2ddc55e361ca[How Spring Boot Maps Environment Variables to Configuration Properties]
+- https://medium.com/simform-engineering/testing-spring-boot-applications-best-practices-and-frameworks-6294e1068516[Testing Spring Boot Applications: Best Practices and Frameworks]
 - https://www.baeldung.com/spring-boot-mssql[Spring Boot with MS SQL]
 === Monitoring
 _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
@@ -259,37 +260,13 @@ architecture-beta
     service db(database)[Database] in games_service
     service server(server) in games_service
 
-     service prometheus(prometheus)[Prometheus] in games_service
-    service grafana(devicon:grafana)[Grafana] in games_service
-    service alert_manager(server)[Alertmanager] in games_service
-    
-    service mailcatcher(server)[Mailcatcher] in games_service
-    service adminer(server)[Adminer] in games_service
-
-....
-
-[source,mermaid]
-....
-architecture-beta
-    
-    //service grafana(devicon:grafana)[devicon:grafana] in games_service
-    //service grafana(devicon-plain:grafana)[devicon-plain:grafana] in games_service
-    service grafana(devicon:grafana-wordmark)[devicon:grafana-wordmark] in games_service
-    // service grafana(skill-icons:grafana-light)[skill-icons:grafana-light] in games_service
-    // service grafana(logos:grafana)[logos:grafana] in games_service
-    // service grafana(deviconskill-icons:grafana-dark)[skill-icons:grafana-dark] in games_service
-    
-    group games_service(server)[Games Service-ICONs]
-
-    service db(database)[Database] in games_service
-    service server(server) in games_service
-
      service prometheus(server)[Prometheus] in games_service
-    
+    service grafana(server)[Grafana] in games_service
     service alert_manager(server)[Alertmanager] in games_service
     
     service mailcatcher(server)[Mailcatcher] in games_service
     service adminer(server)[Adminer] in games_service
 
 ....
+
 
