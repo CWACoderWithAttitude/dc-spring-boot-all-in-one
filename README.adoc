@@ -261,6 +261,7 @@ architecture-beta
     service apiserver(server)[GamesAPIServer] in games_service
 
     service prometheus(server)[Prometheus] in games_service
+    prometheus:R -- L:apiserver
     service grafana(server)[Grafana] in games_service
     service alert_manager(server)[Alertmanager] in games_service
     
