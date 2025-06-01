@@ -36,10 +36,11 @@ Develop your Service based on OpenJDK 17.
 For illustration I added an example REST-Service that manages data on games. 
 This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
 
-To assist your journey of building high quality web services i:
-- added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
+To assist your journey of building high quality web services:
+- the service exposes a self documenting API using OpenAPI aka Swagger. You can access the API documentation at http://localhost:8088/swagger-ui/index.html[http://localhost:8088/swagger-ui/index.html].
+- I added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
 image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/what-the-heck/images/games-jacoco-report.png[JaCoCo Report]
-- included a basic build pipeline based on GitHub Actions. It runs the tests, builds the app and generates the JaCoCo report. The pipeline is triggered on every push to the main branch and on every pull request.
+- basic build pipeline based on GitHub Actions is included. It runs the tests, builds the app and generates the JaCoCo report. The pipeline is triggered on every push to the main branch and on every pull request.
 
 ==== Architecture Diagram
 
@@ -128,7 +129,8 @@ This setup ships with an empty database. Using Bruno you can easily create items
 The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app.
 Never underestimate the importance of monitoring your app. It is crucial to know how your app is doing in production. This setup includes everything you need to get started to monitor your app and to be notified when something goes wrong.
 
-> For me gathering metrics & generating appropriate alerts is key to enable us to run a reliable platform. Dashboards are great to visualize the metrics, but alerts are crucial to be notified when something goes wrong. Dashboards should be build in a way that makes it easy to spot issues, but they are not a replacement for alerts. Alerts should be configured in a way that they are triggered when something is wrong, but not too often to avoid alert fatigue.
+> For me gathering metrics & generating appropriate alerts is key to enable us to run a reliable platform. Dashboards are great to visualize the metrics, but alerts are crucial to be notified when something goes wrong. Dashboards should be build in a way that makes it easy to spot issues. Maybe even more important than just sending alerts it is imperative to send usefull alerts - and not too many of them to prevent alert fatigue.
+
 
 ==== Prometheus
 is configured to scrape metrics from the app and from the host system
