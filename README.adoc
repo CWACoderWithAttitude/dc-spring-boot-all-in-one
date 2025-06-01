@@ -9,19 +9,19 @@ Volker Benders
 :revnumber: 0.1.0
 :revdate: 2024-05-28
 
-> This is an opinionated devcontainer for building REST APIs with Spring Boot. It is not meant to be a complete solution for all use cases, but rather a starting point that covers the most common challenges of building production grade REST services. If you have any suggestions or feedback, please let me know.
-
 == TL;DR
 DevContainer for Spring Boot development that gets you covered for all major challenges of building production grade REST services.
 
+
+
 == What's inside?
-This is a devcontainer for building REST APIs with Spring Boot. It includes all the tools you need to build, test, monitor and deploy your app. 
+This is an opinionated devcontainer for building REST APIs with Spring Boot. It is not meant to be a complete solution for all use cases. It rather provides starting points tp get you started on all of challenges of building production grade REST services. If you have any suggestions or feedback, please let me know.
 
 Let's have a look at the main components:
 * OpenJDK 17  
 * Spring Boot
 * Maven 
-* MS SQL 2022
+* MS SQL DB
 * Prometheus
 * Grafana
 * Alertmanager
@@ -38,6 +38,38 @@ This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Reque
 
 To assist your journey of building high quality web services i added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
 image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/what-the-heck/images/games-jacoco-report.png[JaCoCo Report]
+
+A basic build pipeline based on GitHub Actions is included. It runs the tests, builds the app and generates the JaCoCo report. The pipeline is triggered on every push to the main branch and on every pull request.
+
+==== Architecture Diagram
+
+A picture is worth a thousand words. So let's have a look at the architecture diagram of the devcontainer.
+
+[source,mermaid]
+....
+architecture-beta
+group games_service(cloud)[Games Service DevContainer]
+    service db(database)[Database] in games_service
+    service apiserver(server)[GamesAPI] in games_service
+
+    service prometheus(server)[Prometheus] in games_service
+    prometheus:L -- R:apiserver
+    db:R -- L:apiserver
+    service grafana(server)[Grafana] in games_service
+    service alert_manager(server)[Alertmanager] in games_service
+    
+    service mailcatcher(server)[Mailcatcher] in games_service
+    alert_manager:L -- R:mailcatcher
+    service adminer(server)[Adminer] in games_service
+    db:L -- R:adminer
+    prometheus:T -- B:grafana
+    alert_manager:T -- B:prometheus
+    service mssql_tools(server)[MSSQL_Tools]
+    db:T -- B:mssql_tools
+
+    service bruno(cloud)[Bruno]
+    apiserver:B -- B:bruno....
+
 
 === Testing
 
@@ -238,6 +270,26 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
  +---------------+                              \--------------/
 ----
 
+=== Ditaa2
+[ditaa]
+----
+                         +-------------+
+                         |   Diagram   +----------------+
+                         |   Renderer  |                |
+                         +-------------+                |
+                         | Asciidoctor |                |
+                         |   Diagram   |                |
+                         +-------------+                | Image
+                                ^                       |
+                                | Diagram source        |
+ +---------------+              |                       v
+ |    Asciidoc   |       +------+------+        /-------+------\
+ | with embedded +------>+ Asciidoctor +------->|   Beautiful  |
+ |    diagram {d}|       +-------------+  HTML  |    Output    |
+ +---------------+                              \--------------/
+----
+
+
 === Mermaid
 ==== Sequence
 
@@ -248,33 +300,6 @@ sequenceDiagram
     participant Bob
     Alice->>Bob: Hello Bob, how are you?
     Bob-->>Alice: Great!
-....
-
-==== Architecture Diagram
-
-[source,mermaid]
-....
-architecture-beta
-group games_service(cloud)[Games Service DevContainer]
-
-    service db(database)[Database] in games_service
-    service apiserver(server)[GamesAPI] in games_service
-
-    service prometheus(server)[Prometheus] in games_service
-    prometheus:L -- R:apiserver
-    db:R -- L:apiserver
-    service grafana(server)[Grafana] in games_service
-    service alert_manager(server)[Alertmanager] in games_service
-    
-    service mailcatcher(server)[Mailcatcher] in games_service
-    alert_manager:L -- R:mailcatcher
-    service adminer(server)[Adminer] in games_service
-    db:L -- R:adminer
-    prometheus:T -- B:grafana
-    alert_manager:T -- B:prometheus
-    service mssql_tools(server)[MSSQL_Tools]
-    db:T -- B:mssql_tools
-
 ....
 
 
