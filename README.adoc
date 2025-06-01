@@ -211,7 +211,12 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
 - https://asciidoctor.org/docs/user-manual/[Asciidoctor User Manual]
 - https://docs.asciidoctor.org/diagram-extension/latest/diagrams/[Asciidoctor Diagram Extension]
 - https://gist.github.com/plamentotev/be495e81abd52dc10e7dd51fbb71dd8c/revisions[Asciidoctor Diagram - Ditaa, PlantUML, Graphviz, Mermaid, etc.]
-
+- https://docs.github.com/de/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks [Creating and highlighting code blocks]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-mermaid[Creating diagrams with Mermaid]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-plantuml[Creating diagrams with PlantUML]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-ditaa[Creating diagrams with Ditaa]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-graphviz[Creating diagrams with Graphviz]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-asciidoctor-diagram[Creating diagrams with Asciidoctor Diagram]
 == Architecture
 === Ditaa
 [ditaa]
@@ -252,7 +257,7 @@ architecture-beta
     group games_service(cloud)[Games Service]
 
     service db(database)[Database] in games_service
-    service spring_boot(logos:spring-icon)[Server] in games_service
+    service spring_boot(logos/spring-icon)[Server] in games_service
 
 ....
 
