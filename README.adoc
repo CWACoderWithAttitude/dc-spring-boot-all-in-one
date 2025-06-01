@@ -93,7 +93,10 @@ This setup ships with an empty database. Using Bruno you can easily create items
 
 
 === Monitoring
-The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app
+The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app.
+Never underestimate the importance of monitoring your app. It is crucial to know how your app is doing in production. This setup includes everything you need to get started to monitor your app and to be notified when something goes wrong.
+
+> For me gathering metrics & generating appropriate alerts is key to enable us to run a reliable platform. Dashboards are great to visualize the metrics, but alerts are crucial to be notified when something goes wrong. Dashboards should be build in a way that makes it easy to spot issues, but they are not a replacement for alerts. Alerts should be configured in a way that they are triggered when something is wrong, but not too often to avoid alert fatigue.
 
 ==== Prometheus
 is configured to scrape metrics from the app and from the host system
@@ -180,7 +183,7 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
 == ToDos
 - https://www.freecodecamp.org/news/how-to-run-github-actions-locally/s[Test Guhub Actions locally] w act
 - Integrate alerting into the setup. This will be done with 
-  * [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]# and 
+  * [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]#  and 
   * https://grafana.com/docs/grafana/latest/alerting/notifications/[Grafana Alerting] and
   * [.line-through]#https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4[Send email alerts using Prometheus Alert Manager]#
 
@@ -192,3 +195,36 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
 
   Makefile contains `generate_markdown: clean asciidoc2docbook docbook2md` to do exactly that.
     It should be added to the build pipeline to generate the markdown file automatically...
+
+== Links
+=== Dev
+- https://learn.microsoft.com/de-de/java/openjdk/containers[Container-Bilder für den Microsoft Build von OpenJDK  
+- https://www.baeldung.com/spring-rest-openapi-documentation[Spring REST OpenAPI Documentation]
+- https://www.baeldung.com/spring-boot-prometheus[Spring Boot Prometheus]
+
+=== Monitoring
+_ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
+- https://prometheus.io/docs/alerting/latest/alertmanager/[Alertmanager]
+
+=== Writing
+- https://asciidoctor.org/docs/user-manual/[Asciidoctor User Manual]
+- https://docs.asciidoctor.org/diagram-extension/latest/diagrams/[Asciidoctor Diagram Extension]
+
+== Architecture
+[ditaa]
+----
+                         +-------------+
+                         |   Diagram   +----------------+
+                         |   Renderer  |                |
+                         +-------------+                |
+                         | Asciidoctor |                |
+                         |   Diagram   |                |
+                         +-------------+                | Image
+                                ^                       |
+                                | Diagram source        |
+ +---------------+              |                       v
+ |    Asciidoc   |       +------+------+        /-------+------\
+ | with embedded +------>+ Asciidoctor +------->|   Beautiful  |
+ |    diagram {d}|       +-------------+  HTML  |    Output    |
+ +---------------+                              \--------------/
+----
