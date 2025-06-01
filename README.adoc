@@ -259,7 +259,10 @@ architecture-beta
     service adminer(server)[Adminer] in games_service
 
     db:L -- R:spring_boot
-    
+    adminer:L -- R:db
+    spring_boot:T -- B:prometheus
+    spring_boot:T -- B:alert_manager
+    alert_manager:T -- B:mailcatcher
 
 ....
 
