@@ -267,7 +267,7 @@ architecture-beta
     service mailcatcher(server)[Mailcatcher] in games_service
     service adminer(server)[Adminer] in games_service
 
-    apiserver:L -- R:db
+    apiserver:R -- L:db
 
 ....
 
