@@ -253,15 +253,17 @@ architecture-beta
 
     service db(database)[Database] in games_service
     service spring_boot(server)[Server] in games_service
-    service prometheus(server)[Prometheus] in games_service
+    service prometheus(devicon:prometheus-wordmark)[Prometheus] in games_service
+    service grafana(devicon:devicon:grafana-wordmark)[Grafana] in games_service
     service alert_manager(server)[Alertmanager] in games_service
+    
     service mailcatcher(server)[Mailcatcher] in games_service
     service adminer(server)[Adminer] in games_service
 
     db:L -- R:spring_boot
     adminer:L -- R:db
-    spring_boot:T -- B:prometheus
-    spring_boot:T -- B:alert_manager
+    spring_boot:L -- R:prometheus
+    prometheus:L -- R:alert_manager
     alert_manager:T -- B:mailcatcher
 
 ....
