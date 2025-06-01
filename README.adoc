@@ -68,7 +68,7 @@ group games_service(cloud)[Games Service DevContainer]
     db:T -- B:mssql_tools
 
     service bruno(cloud)[Bruno]
-    apiserver:B -- B:bruno....
+    apiserver:B -- B:bruno
 ....
 
 === Testing
