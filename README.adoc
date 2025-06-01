@@ -257,7 +257,7 @@ architecture-beta
     group games_service(cloud)[Games Service]
 
     service db(database)[Database] in games_service
-    service spring_boot(logos/spring-icon)[Server] in games_service
+    service server(logos:aws-ec2) in games_service
 
 ....
 
