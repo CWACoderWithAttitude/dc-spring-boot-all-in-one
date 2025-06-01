@@ -255,20 +255,25 @@ sequenceDiagram
 [source,mermaid]
 ....
 architecture-beta
-    group games_service(cloud)[Games Service]
+group games_service(cloud)[Games Service DevContainer]
 
     service db(database)[Database] in games_service
-    service apiserver(server)[GamesAPIServer] in games_service
+    service apiserver(server)[GamesAPI] in games_service
 
     service prometheus(server)[Prometheus] in games_service
-    prometheus:R -- L:apiserver
+    prometheus:L -- R:apiserver
+    db:R -- L:apiserver
     service grafana(server)[Grafana] in games_service
     service alert_manager(server)[Alertmanager] in games_service
     
     service mailcatcher(server)[Mailcatcher] in games_service
+    alert_manager:L -- R:mailcatcher
     service adminer(server)[Adminer] in games_service
-
-    apiserver:R -- L:db
+    db:L -- R:adminer
+    prometheus:T -- B:grafana
+    alert_manager:T -- B:prometheus
+    service mssql_tools(server)[MSSQL_Tools]
+    db:T -- B:mssql_tools
 
 ....
 
