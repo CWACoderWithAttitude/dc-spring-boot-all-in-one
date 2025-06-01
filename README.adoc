@@ -211,6 +211,7 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
 - https://docs.asciidoctor.org/diagram-extension/latest/diagrams/[Asciidoctor Diagram Extension]
 
 == Architecture
+=== Ditaa
 [ditaa]
 ----
                          +-------------+
@@ -228,3 +229,14 @@ _ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
  |    diagram {d}|       +-------------+  HTML  |    Output    |
  +---------------+                              \--------------/
 ----
+
+=== Mermaid
+
+[source,mermaid]
+....
+sequenceDiagram
+    participant Alice
+    participant Bob
+    Alice->>Bob: Hello Bob, how are you?
+    Bob-->>Alice: Great!
+....
