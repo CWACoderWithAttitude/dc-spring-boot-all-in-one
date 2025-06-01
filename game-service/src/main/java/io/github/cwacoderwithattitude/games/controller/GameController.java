@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,7 @@ import io.github.cwacoderwithattitude.games.service.GameService;
 import io.github.cwacoderwithattitude.games.service.SeedDataReader;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jakarta.annotation.PostConstruct;
 
 @RestController
@@ -35,6 +37,7 @@ public class GameController {
     java.util.logging.Logger logger = java.util.logging.Logger.getLogger(GameController.class.getName());
     @Autowired
     private MeterRegistry meterRegistry;
+
     @Value("classpath:board_games.json")
     Resource resource; // = new ClassPathResource("rules_of_acquisiton.json");
 
@@ -44,7 +47,11 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of GET requests to /games/ endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        // TODO this check is nescessary to avoid NullPointerException
+        // when meterRegistry is not initialized (e.g. in tests)
+        if (counter != null) {
+            counter.increment();
+        }
         return gameService.list();
     }
 
@@ -54,7 +61,9 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of GET requests to /games/{id} endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        if (counter != null) {
+            counter.increment();
+        }
         try {
             Game game = gameService.getById(Long.parseLong(id));
             if (game == null) {
@@ -74,7 +83,9 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of PUT requests to /games/{id} endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        if (counter != null) {
+            counter.increment();
+        }
         try {
             Game updatedGame = gameService.update(id, game);
             return ResponseEntity.ok(updatedGame);
@@ -89,7 +100,9 @@ public class GameController {
                 // .tag("title", StringUtils.isEmpty(title) ? "all" : title)
                 .description("a number of POST requests to /games/new endpoint")
                 .register(meterRegistry);
-        counter.increment();
+        if (counter != null) {
+            counter.increment();
+        }
         logger.info(null == game ? "Game is null" : "Game: " + game);
         Game savedGame = gameService.save(game);
         return ResponseEntity.ok(savedGame);

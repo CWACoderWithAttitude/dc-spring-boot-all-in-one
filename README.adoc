@@ -1,52 +1,151 @@
-= DevConttainer for Spring Boot
-DevContainer for Spring Boot development.
-
-:toc: macro
-:toclevels: 3
+= https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one[Spring Boot All-In-One-Devcontainer]
+Volker Benders
+:toc:
 :toc-title: Table of Contents
-:sectanchors:
-:sectlinks:
-:source-highlighter: rouge
-:icons: font
-:linkcss:
-:linkcss: true
-:toc-placement: preamble
-:toc-mode: macro
-:toc-transition: slide
+:imagesdir: ./images
+
+:description: DevContainer for Spring Boot development that gets you covered for all major challenges of building production grade REST services.
+:keywords: devcontainer, spring boot, rest api, production grade, monitoring, testing, persistence, mssql, prometheus, grafana, alertmanager, mailcatcher
+:revnumber: 0.1.0
+:revdate: 2024-05-28
 
 == TL;DR
-Concise setup to develop Spring Boot based apps. A bunch of standard tools are included to address all challenges when building a production ready web APIs.
+DevContainer for Spring Boot development that gets you covered for all major challenges of building production grade REST services.
 
-== What is this?
-This is a devcontainer for building REST APIs with Spring Boot. It includes all the tools you need to build, test, monitor and deploy your app. The devcontainer is based on Docker and can be used with any IDE that supports Docker, like Visual Studio Code or JetBrains IDEs.
 
-== Whats inside?
-To address some of the most relevant aspects of developing a REST service i've included several components.
+
+== What's inside?
+This is an opinionated devcontainer for building REST APIs with Spring Boot. It is not meant to be a complete solution for all use cases. It rather provides starting points tp get you started on all of challenges of building production grade REST services. If you have any suggestions or feedback, please let me know.
+
+Let's have a look at the main components:
+* OpenJDK 17  
+* Spring Boot
+* Maven 
+* MS SQL DB
+* Prometheus
+* Grafana
+* Alertmanager
+* Mailcatcher
+* Adminer
+* JaCoCo
+* Bruno
 
 === Development
 Develop your Service based on OpenJDK 17. 
 
-For illustration I added an example REST-Service that manages data on games. This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
+For illustration I added an example REST-Service that manages data on games. 
+This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
 
-> You can easyly change the JDK by choosing a different base image in the `devcontainer.json` file. The current base image is `mcr.microsoft.com/vscode/devcontainers/java:0-17`.
+To assist your journey of building high quality web services:
+- the service exposes a self documenting API using OpenAPI aka Swagger. You can access the API documentation at http://localhost:8088/swagger-ui/index.html[http://localhost:8088/swagger-ui/index.html].
+- I added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
+image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/what-the-heck/images/games-jacoco-report.png[JaCoCo Report]
+- basic build pipeline based on GitHub Actions is included. It runs the tests, builds the app and generates the JaCoCo report. The pipeline is triggered on every push to the main branch and on every pull request.
+
+==== Architecture Diagram
+
+A picture is worth a thousand words. So let's have a look at the architecture diagram of the devcontainer.
+
+[source,mermaid]
+....
+architecture-beta
+group games_service(cloud)[Games Service DevContainer]
+    service db(database)[Database] in games_service
+    service apiserver(server)[GamesAPI] in games_service
+
+    service prometheus(server)[Prometheus] in games_service
+    prometheus:L -- R:apiserver
+    db:R -- L:apiserver
+    service grafana(server)[Grafana] in games_service
+    service alert_manager(server)[Alertmanager] in games_service
+    
+    service mailcatcher(server)[Mailcatcher] in games_service
+    alert_manager:L -- R:mailcatcher
+    service adminer(server)[Adminer] in games_service
+    db:L -- R:adminer
+    prometheus:T -- B:grafana
+    alert_manager:T -- B:prometheus
+    service mssql_tools(server)[MSSQL_Tools]
+    db:T -- B:mssql_tools
+
+    service bruno(cloud)[Bruno]
+    apiserver:B -- B:bruno
+....
+
+=== Testing
+
+I ship my examples with https://www.usebruno.com[Bruno] collections.
+
+Please find the collections in the `bruno` folder. You can import them into Bruno by clicking on the `+` icon in the top left corner and selecting `Import Collection`.
+
+There's a CLI tool to run collections, too:
+```
+❯ bru run . --reporter-html results.html
+Running Folder
+
+Create Game (200 ) - 71 ms
+   ✓ assert: res.status: eq 200
+   ✓ should return status 200 (OK)
+   ✓ id of the create game entity should be greater than 0
+Get all games (200 ) - 87 ms
+   ✓ assert: res.status: eq 200
+Get game by existing id (200 ) - 10 ms
+   ✓ assert: res.status: eq 200
+Get game by non-existing id (404 ) - 7 ms
+   ✓ assert: res.status: eq 404
+Update Game - existing id (200 ) - 16 ms
+Monitoring - Metrics (200 ) - 11 ms
+Monitoring - Info (200 ) - 2 ms
+Monitoring - Health (200 ) - 4 ms
+Delete Game by existing id (204 ) - 12 ms
+   ✓ assert: res.status: eq 204
+Delete Game by non existing id (404 ) - 9 ms
+   ✓ assert: res.status: eq 404
+Upload Games from JSON File (415 ) - 9 ms
+Update Game - non existing id (200 ) - 7 ms
+
+Requests:    12 passed, 12 total
+Tests:       2 passed, 2 total
+Assertions:  6 passed, 6 total
+Ran all requests - 245 ms
+
+Requests:    12 passed, 12 total
+Tests:       2 passed, 2 total
+Assertions:  6 passed, 6 total
+```
+
+image::bruno-cli-report.png[Bruno CLI Report]
+
+> I like Bruno - open source, local execution, no cloud services required. 
+Support for GUI and CLI. Excellent support for adding asserts and test to your requests.
 
 === Persistence
-Is implemented by MS SQL 2022. 
 
-Use a diffenrent verison by selecting a different image in the `docker-compose.yml` file. The current image is `mcr.microsoft.com/mssql/server:2022-latest`.
+Is implemented by MS SQL 2022. 
+This setup ships with an empty database. Using Bruno you can easily create items or upload the a set of default games. By default the service default games are loaded from file:///./games-service/src/(resources/board-games.json[] on startup if the db is empty.
+
 
 === Monitoring
-The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app
+The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app.
+Never underestimate the importance of monitoring your app. It is crucial to know how your app is doing in production. This setup includes everything you need to get started to monitor your app and to be notified when something goes wrong.
+
+> For me gathering metrics & generating appropriate alerts is key to enable us to run a reliable platform. Dashboards are great to visualize the metrics, but alerts are crucial to be notified when something goes wrong. Dashboards should be build in a way that makes it easy to spot issues. Maybe even more important than just sending alerts it is imperative to send usefull alerts - and not too many of them to prevent alert fatigue.
+
 
 ==== Prometheus
 is configured to scrape metrics from the app and from the host system
 
 ==== Grafana
-is used to visualize the collected metrics. I preconfigured the datasource connection to prometheus.
-You only need to add a dashboard. For starters you can try https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/[dashboard 19004]
+is used to visualize the collected metrics. This setup ships with a preconfigured datasource connection to prometheus.
+You only need to add a dashboard to show Spring boot metrics. For starters you can try https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/[dashboard 19004]:
+
+1. Open Grafana - default credentials are `admin`/`admin`: `.env` file contains the default password -> GF_SECURITY_ADMIN_PASSWORD.
+
+2. You can import this dashboard by clicking on the `+` icon in the left sidebar and selecting `Import`. Then paste the dashboard ID `19004` into the input field and click on `Load`. You can then select the Prometheus datasource and click on `Import`.
 
 ==== Alertmanager
 is used to send notifications when an alert is triggered. Since you definitely want to be notified when your app is down or when something goes wrong, I added a simple alerting rule that will trigger an alert when the app is down. To keep it simple the alerts will be sent via email to a local mailtcatcher.
+image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/what-the-heck/images/mailcatcher-alert-messages.png[Mailcatcher Alert Messages]
 
 ==== Mailcatcher
 can be reached at http://localhost:1080/[http://localhost:1080] (You can test the email notification by sending a test email to the configured SMTP server.)
@@ -54,16 +153,17 @@ This is an app that accepts SMTP mail connections.Received mails are shown in a 
 
 === DB Frontend
 
+To make is as easy for you as possible i included difffent ways to peek into the datase. One is a web based GUI, the other is a CLI tool.
+
 === GUI
 
-To manage the database I added Adminer. Adminer is a lightweight database management tool that can be used to manage your database. It can be reached at http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010]. Please lookup the DB password in the `.env` file
+Adminer is a web based DB management tool that can be used to manage your database. It can be reached at http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010]. Please lookup the DB password fron file://.devcontainer/.env[.env] file - look out for property `mssql_sa_password`.
 
 === CLI
 
 In case you prefer CLI I included `mssql-tools`:
 
 > The DB password for the `sa` user is stored in the `.env` file as `mssql_sa_password`. It's injected into the mssql-tools container in docker-compoose as `MSSQL_PASSWORD`.
-
 
 ```bash
 docker exec -it mssql.local /bin/bash
@@ -95,100 +195,65 @@ id      title              ean13
 ```
 
 
-
-=== Components
-
-Everything is done with containers:
-- Building an async FastAPI service backed by Postgresql
-- Testing using TDD and BDD
-- Monitoring with Prometheus
-- Alerting with Alertmanager
-- Visualizing collected metrics with Grafana
-- Adminer DB management
-- Mailcatcher to collect and show alert notifications
-
-So you can start building your service without having to install anything on your local machine - except Docker Desktop. I've not tested running with podman yet.
-
 === Why?
 When developing a REST API you need to think about a lot of things. You need to think about how to test your code, how to monitor it, how to deploy it and how to make sure it runs in a container. This is a lot of stuff to think about. So I thought it would be a good idea to build a full blown REST API that covers all these topics. The goal is to show you how to do all this stuff in a simple way. The goal is not to build the best API ever. 
 
 === Why devcontainers?
 We all know "Works on my machine" is a bad slogan. What if "works on my machine" simply means: great - ship it. What if we could turn "works on my machine" into "works in a container"? An envirnment that is consistent regardless of the host system.
 I want to show you why we should embrace the slogan "It works on my machine". Using devcontainers it is easy to build your product in an environment that's pretty close to your prod env. Let's face it - we all have different machines and different setups. When using containers starting from day one you can be suree 
-== Branching
-I'll split the implementation into multiple parts. Each part in its own branch - so you can skip any part you don't want to see.
-The branches will be named after the part they represent.
-The branches are:
-
-- `phase-0`: Basic FastAPI app with all dependencies, a simple GET endpoint and test code. A Makefile is included to show how to run the tests and stuff. A Pipeline is included to run the tests on every commit. Coverage reports are generated and published to https://cwacoderwithattitude.github.io/articles_dc_fastapi_startrek/[github pages].
-- `crud`: Add a simple CRUD API to the app. This will allow us to create, read, update and delete data on ships from the Startrek universe. The data will be stored in a SQLite database. Our test coverage enables us to refactor our code without any doubt on correct functionality.
-    * replaced sqlite with a PostgreSQL db.
-    * added DB Adminer to provide a used friendly interface to the database.
-    * added scripts to show how to test the API with https://github.com/AnWeber/vscode-httpyac[httpyac] and Bruno.
-- `monitoring`: Add monitoring to the app.
-    * At first we'll have the app export metrics for https://prometheus.io/[Prometheus]
-    * Next we'll add prometheus to our setup and configure it to scrape metrics from our app and from prometheus itself
-    ** Prometheus is configured to reread its config w/o restart. Please refer to bruno collection for details.
-
-//include::api-tests/bruno/startrek-ships/prometheus/prometheus_reread_config.bru[lines=8..8]    
-    
-== Monitoring
-- The main FastAPI app exports prometheus metrics.
-- Metrics are collected by prometheus which runs in its own container.
-    * In addtion to application metrics the host system runs node_exporter to export metrics of the system that runs the app stack
-- I implemented a simple alerting rule to show how to use alerting in prometheus. The example rule will kick in when one of the monitored containers is down. Alertmananger wil send a notification via email. The test notification can be seen in http://localhost:1080[mailcatcher].
-- Grafana is used to show dashboards visualizing the collected metrics.
-
-prometheus.yml implements monitoring for the main FastAPI app.
-
-== Developement
-In general i'll stick to building the API in a TDD way. Tests are written in https://docs.pytest.org/en/stable/[pytest].
-
-Implementation of https://pytest-bdd.readthedocs.io/en/stable/[pytest-bdd] shows how to write business driven tests. Please refer to `get_ship.feature` and its implementation `get_ship.py` for details.
-Instead of using https://behave.readthedocs.io/en/latest/[behave] i decided 
-
 
 == Project Links
-- http://localhost:8000/docs[Swagger UI]
-- http://localhost:8000/redoc[ReDoc]
-- http://localhost:8010/?pgsql=startrek_db&username=star&db=star-trek-db&ns=public[DB Adminer]
-- http://localhost:8090/targets[Prometheus Targets] Check scraping metrics from endpoints is OK
-- http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser[Grafana]
-- http://localhost:9093/#/alerts[AlertManager]
 
 [cols="5,1"]  
 |===
-| http://localhost:8000/docs[Swagger UI] OpenAPI aka Swagger ^| OK
-| http://localhost:8000/redoc[ReDoc] ^| OK
-| http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo&[DB Adminer] DB Admin Frontend ^| OK
+| http://localhost:8088/swagger-ui/index.html[OpenAPI aka Swagger] ^| OK
+| http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010] DB Admin Frontend ^| OK
 | http://localhost:8090/targets[Prometheus Targets] Check scraping metrics from endpoints is healthy ^| OK 
-| http://localhost:8090/query?g0.expr=http_requests_total%7Binstance%3D%22articles_dc_fastapi_startrek.local%3A8000%22%2C+method%3D%22POST%22%7D&g0.show_tree=1&g0.tab=graph&g0.range_input=1h&g0.res_type=auto&g0.res_density=medium&g0.display_mode=lines&g0.show_exemplars=0[Prometheus > All Requests > POST] All Post Requests ^| OK 
 | http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser[Grafana] Visualize Metrics ^| OK
-| http://localhost:8093/#/alerts[AlertManager] ^| NOK
+| http://localhost:8093/#/alerts[AlertManager] ^| OK
 | http://localhost:1080[Mailcatcher - Fake SMTP] Apps may send SMTP Mails to Pot 1025 ^| OK
 |=== 
-
-== General Links
-- https://www.youtube.com/@ArjanCodes[@ArjanCodes] is a great channel to learn about FastAPI and Python in general.
-- https://fastapi.tiangolo.com/[fastapi.tiangolo.com] is the official documentation for FastAPI.
-- https://www.usebruno.com[Bruno] makes a fine replacement for Postman, Insomnia and other API testing tools.
-- https://medium.com/@imyounas/setting-up-kind-kubernetes-cluster-with-prometheus-grafana-and-k6-for-monitoring-and-stress-14d658c4e66e [Setting up kind Kubernetes cluster with Prometheus, Grafana and K6 for monitoring and stress testing] - a great article on how to set up a kind cluster with prometheus and grafana.
-
-I miss to list to many great articles of outstanding authors - just because i was in a hurry or too lazy to keep a note. If you have a great article that you think should be listed here please let me know.
 
 == ToDos
 - https://www.freecodecamp.org/news/how-to-run-github-actions-locally/s[Test Guhub Actions locally] w act
 - Integrate alerting into the setup. This will be done with 
-  * [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]# and 
-  * https://grafana.com/docs/grafana/latest/alerting/notifications/[Grafana Alerting] and
-  * [.line-through]#https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4[Send email alerts using Prometheus Alert Manager]#
-- [.line-through]#Add https://github.com/haravich/fake-smtp-server[fake smtp] server to enanble local test of alertmanager and grafana#
-- Add https://dev.to/sivakumarmanoharan/caching-in-fastapi-unlocking-high-performance-development-20ej[Caching in FastAPI: Unlocking High-Performance Development]
-- Add https://rameshfadatare.medium.com/spring-boot-crud-example-with-postgresql-926c87f0129a0[Spring Boot CRUD Example with PostgreSQL]
-- Integrate Keycloak for authentication and authorization
-- Run app on Firebase
-- Depoloy app on AWS using CDK and AWS Lambda
-- Add Kong API Gateway
-- Convert ASCIIDOC to Markdown
-  * Either https://github.com/opendevise/downdock[Downdoc] or
-  * Pa
+  * [ ] - [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]#  and 
+  * [ ] - https://grafana.com/docs/grafana/latest/alerting/notifications/[Grafana Alerting] and
+  * [ ] - [.line-through]#https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4[Send email alerts using Prometheus Alert Manager]#
+- [ ] - publish JaCoCo Report 
+- [ ] - Integrate Keycloak for authentication and authorization
+- [ ] - Run app on Firebase
+- [ ] - Deploy app on AWS using CDK and AWS Lambda
+- [ ] - Add Kong API Gateway
+- [ ] - Automate conversion of asciidoc 2 markdown. Makefile contains `generate_markdown: clean asciidoc2docbook docbook2md` to do exactly that. It should be added to the build pipeline to generate the markdown file automatically...
+- [ ] - addd appropriate icons to the architecture diagram
+- [ ] - fix test mocks for metrics and counters
+
+  
+    
+
+== Links
+=== DevOps
+- https://learn.microsoft.com/de-de/java/openjdk/containers[Container-Bilder für den Microsoft Build von OpenJDK  
+- https://www.baeldung.com/spring-rest-openapi-documentation[Spring REST OpenAPI Documentation]
+- https://www.baeldung.com/spring-boot-prometheus[Spring Boot Prometheus]
+- https://medium.com/@AlexanderObregon/how-spring-boot-maps-environment-variables-to-configuration-properties-2ddc55e361ca[How Spring Boot Maps Environment Variables to Configuration Properties]
+- https://medium.com/simform-engineering/testing-spring-boot-applications-best-practices-and-frameworks-6294e1068516[Testing Spring Boot Applications: Best Practices and Frameworks]
+- https://www.baeldung.com/spring-boot-mssql[Spring Boot with MS SQL]
+=== Monitoring
+_ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
+- https://prometheus.io/docs/alerting/latest/alertmanager/[Alertmanager]
+
+=== Writing
+
+Documenation is provided in Asciidoc format.
+- https://asciidoctor.org/docs/user-manual/[Asciidoctor User Manual]
+- https://docs.asciidoctor.org/diagram-extension/latest/diagrams/[Asciidoctor Diagram Extension]
+- https://gist.github.com/plamentotev/be495e81abd52dc10e7dd51fbb71dd8c/revisions[Asciidoctor Diagram - Ditaa, PlantUML, Graphviz, Mermaid, etc.]
+- https://docs.github.com/de/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks [Creating and highlighting code blocks]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-mermaid[Creating diagrams with Mermaid]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-plantuml[Creating diagrams with PlantUML]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-ditaa[Creating diagrams with Ditaa]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-graphviz[Creating diagrams with Graphviz]
+- https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-asciidoctor-diagram[Creating diagrams with Asciidoctor Diagram]
+

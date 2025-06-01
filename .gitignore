@@ -16,3 +16,5 @@ frontends/
 junit/test-results.xml
 article.xml
 README.xml
+*.md
+
