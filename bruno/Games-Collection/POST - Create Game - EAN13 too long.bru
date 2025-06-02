@@ -1,7 +1,7 @@
 meta {
-  name: Create Game
+  name: POST - Create Game - EAN13 too long
   type: http
-  seq: 1
+  seq: 14
 }
 
 post {
@@ -12,7 +12,7 @@ post {
 
 body:json {
   {
-      "ean13": "4002051699093",
+      "ean13": "40020516990931",
       "max_number_of_players": 4,
       "min_age": 6,
       "min_number_of_players": 1,
@@ -25,7 +25,7 @@ body:json {
 }
 
 assert {
-  res.status: eq 200
+  res.status: eq 400
 }
 
 script:post-response {
@@ -40,11 +40,8 @@ script:post-response {
 tests {
   test("should return status 200 (OK)", function () {
     const data = res.getBody();
-    expect(res.getStatus()).to.equal(200);
+    expect(res.getStatus()).to.equal(400);
   });
    
-  test("id of the create game entity should be greater than 0", function () {
-    const data = res.getBody();
-    expect(data.id).to.be.gt(0);
-  });
+  
 }
