@@ -1,7 +1,6 @@
 services:
-  
   games-service:
-    image: mcr.microsoft.com/devcontainers/java:17
+    image: mcr.microsoft.com/devcontainers/java:21
     hostname: games-service.local
     volumes:
       -  ..:/src:cached

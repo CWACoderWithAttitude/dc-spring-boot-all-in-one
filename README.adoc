@@ -18,10 +18,11 @@ DevContainer for Spring Boot development that gets you covered for all major cha
 This is an opinionated devcontainer for building REST APIs with Spring Boot. It is not meant to be a complete solution for all use cases. It rather provides starting points tp get you started on all of challenges of building production grade REST services. If you have any suggestions or feedback, please let me know.
 
 Let's have a look at the main components:
-* OpenJDK 17  
-* Spring Boot
-* Maven 
-* MS SQL DB
+
+* OpenJDK 21 
+* Spring Boot 3.5.0
+* Maven 3.9.9
+* MS SQL DB 2022
 * Prometheus
 * Grafana
 * Alertmanager
@@ -30,8 +31,10 @@ Let's have a look at the main components:
 * JaCoCo
 * Bruno
 
-=== Development
-Develop your Service based on OpenJDK 17. 
+== Components
+
+=== Spring Boot - OpenJDK 21
+Develop your Spring Boot 3.5 Service on OpenJDK 21. 
 
 For illustration I added an example REST-Service that manages data on games. 
 This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
@@ -145,7 +148,7 @@ You only need to add a dashboard to show Spring boot metrics. For starters you c
 
 ==== Alertmanager
 is used to send notifications when an alert is triggered. Since you definitely want to be notified when your app is down or when something goes wrong, I added a simple alerting rule that will trigger an alert when the app is down. To keep it simple the alerts will be sent via email to a local mailtcatcher.
-image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/what-the-heck/images/mailcatcher-alert-messages.png[Mailcatcher Alert Messages]
+image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/main/images/mailcatcher-alert-messages.png[Mailcatcher Alert Messages]
 
 ==== Mailcatcher
 can be reached at http://localhost:1080/[http://localhost:1080] (You can test the email notification by sending a test email to the configured SMTP server.)

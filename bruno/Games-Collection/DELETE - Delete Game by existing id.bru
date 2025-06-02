@@ -1,15 +1,15 @@
 meta {
-  name: Get game by existing id
+  name: DELETE - Delete Game by existing id
   type: http
-  seq: 4
+  seq: 10
 }
 
-get {
+delete {
   url: http://localhost:8088/games/{{game_id}}
   body: none
   auth: inherit
 }
 
 assert {
-  res.status: eq 200
+  res.status: eq 204
 }
