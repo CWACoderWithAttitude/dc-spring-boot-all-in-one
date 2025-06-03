@@ -260,3 +260,26 @@ Documenation is provided in Asciidoc format.
 - https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-graphviz[Creating diagrams with Graphviz]
 - https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-asciidoctor-diagram[Creating diagrams with Asciidoctor Diagram]
 
+== Diagramming
+The devcontainer uses https://asciidoctor.org[Asciidoctor] to generate the documentation. The architecture diagram is created using https://mermaid.js.org[Mermaid].
+
+
+[ditaa]
+....
+                   +-------------+
+                   | Asciidoctor |-------+
+                   |   diagram   |       |
+                   +-------------+       | PNG out
+                       ^                 |
+                       | ditaa in        |
+                       |                 v
+ +--------+   +--------+----+    /---------------\
+ |        | --+ Asciidoctor +--> |               |
+ |  Text  |   +-------------+    |   Beautiful   |
+ |Document|   |   !magic!   |    |    Output     |
+ |     {d}|   |             |    |               |
+ +---+----+   +-------------+    \---------------/
+     :                                   ^
+     |          Lots of work             |
+     +-----------------------------------+
+....
