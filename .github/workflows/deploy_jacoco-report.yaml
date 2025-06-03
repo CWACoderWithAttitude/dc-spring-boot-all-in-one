@@ -2,7 +2,7 @@ name: build and test spring-api
 
 on:
   workflow_run:
-    workflows: [build and deploy spring-api]
+    workflows: [build and deploy spring-apiXXX]
     types:
       - completed
 
