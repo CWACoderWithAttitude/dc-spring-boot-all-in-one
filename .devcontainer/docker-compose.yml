@@ -11,8 +11,7 @@ services:
       - "${app_port}:8080"
       - "${app_debug_port}:8000"
     depends_on:
-      - mssql
-      - prometheus
+      - db
     command: >
       bash -c "sleep infinity"
     networks:
@@ -25,108 +24,31 @@ services:
     ports:
       - ${adminer_port}:8080
     depends_on:
-      - mssql
+      - db
     networks:
       game-service-net:
 
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    hostname: prometheus.local
-    ports:
-      - ${prometheus_port}:9090
-    volumes:
-      - ./prometheus_config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus_config/alert_rules.yml:/etc/prometheus/alert_rules.yml
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.enable-lifecycle'
-    networks:
-      game-service-net:
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
-      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
-      - HTTP_PROXY=${http_proxy}
-      - HTTPS_PROXY=${https_proxy}
-      - NO_PROXY=localhost,*.local
-    ports:
-      - ${grafana_port}:3000
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-    depends_on:
-       - prometheus
-    networks:
-      game-service-net:
-
-  alertmanager:
-    image: prom/alertmanager:latest
-    restart: unless-stopped
-    container_name: alertmgr
-    hostname: alertmanager.local
-    environment:
-      - ALERTMANAGER_SMTP_REQUIRE_TLS=false
-    ports:
-      - ${alertmanager_port}:9093
-    volumes:
-      - "./alertmanager:/config"
-      - alertmanager-data:/data
-    command: --config.file=/config/alertmanager.yml --log.level=debug
-    networks:
-      game-service-net:
       
-  # https://github.com/dockage/mailcatcher
-  mailcatcher:
-    restart: on-failure
-    image: dockage/mailcatcher:0.9.0
-    hostname: mailcatcher.local
-    ports:
-    - "1080:1080"
-    - "1025:1025"
-    networks:
-      game-service-net:
-
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: mssql
-    hostname: mssql.local
+  db:
+    image: postgres:14.1-alpine
+    hostname: db.local
+    restart: always
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=${mssql_sa_password}
-      - MSSQL_PID=Developer
+      - POSTGRES_USER=${db_user} #postgres
+      - POSTGRES_PASSWORD=${db_password} #postgres
+      - POSTGRES_DB=${db_name} #fritzbox
     ports:
-      - "${mssql_port}:1433"
+      - "${db_port}:5432"
     volumes:
-      - mssql_data:/var/opt/mssql
+      - pg_data:/var/lib/postgresql/data
     networks:
       game-service-net:
-  mssql-tools:
-    image: mcr.microsoft.com/mssql-tools:latest
-    container_name: mssql-tools
-    environment:
-      - MSSQL_PASSWORD=${mssql_sa_password}
-    command: ["bash", "-c", "sleep infinity && bash"]
-    networks:
-      game-service-net:
+  
 
 networks:
   game-service-net:
 
 volumes:
-  db_data: 
-    driver: local
-  grafana_data:
-    driver: local
-  alertmanager-data:
-    driver: local
-  data:
-    name: kener_db
-  mssql_data:
-    driver: local
-  mssql_data2019:
+  pg_data: 
     driver: local

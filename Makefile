@@ -10,6 +10,9 @@ markdown_result=README.md
 .PHONY: build run adoc2md asciidoc xml2md
 # Build and run the Docker container for the game service
 
+check_docker_compose_config:
+	docker-compose -f .devcontainer/docker-compose.yml config
+
 sb_clean:
 	game-service/mvnw clean --file game-service/pom.xml
 sb_build:
