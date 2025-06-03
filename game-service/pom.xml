@@ -16,7 +16,11 @@
 	<description>Manage Games Data</description>
 	<url>https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one</url>
 	<licenses>
-		<license>LICENSE</license>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
 	<developers>
 		<developer>
