@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClient;
@@ -31,6 +32,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 
 @WebMvcTest(GameController.class)
+@ContextConfiguration(classes = GameControllerTest.MeterRegistryConfig.class)
 class GameControllerTest {
 
     @Autowired
@@ -38,9 +40,6 @@ class GameControllerTest {
 
     @MockitoBean
     private GameService gameService;
-
-    @MockitoBean
-    private MeterRegistry meterRegistry;
 
     @MockitoBean
     private SeedDataReader seedDataReader;
@@ -51,15 +50,6 @@ class GameControllerTest {
         public MeterRegistry meterRegistry() {
             return new SimpleMeterRegistry();
         }
-    }
-
-    @BeforeEach
-    void setup() {
-        // If you want to mock the Counter directly, you can do it like this:
-        Counter counter = Counter.builder("api_games_list")
-                .description("a number of GET requests to /games/ endpoint")
-                .register(meterRegistry);
-        Mockito.when(meterRegistry.counter("api_games_list")).thenReturn(counter);
     }
 
     @Test
@@ -114,7 +104,7 @@ class GameControllerTest {
      * @Test
      * void update_shouldReturnNotFound() throws Exception {
      * Mockito.when(gameService.update(eq(2L), any(Game.class))).thenReturn(null);
-     * 
+     *
      * mockMvc.perform(put("/games/2")
      * .contentType(MediaType.APPLICATION_JSON)
      * .content("{\"title\":\"Not Found\"}"))
@@ -137,15 +127,15 @@ class GameControllerTest {
      * @Test
      * void deleteGameById_shouldReturnNoContent() throws Exception {
      * Mockito.when(gameService.deleteById(1L)).thenReturn(true);
-     * 
+     *
      * mockMvc.perform(delete("/games/1"))
      * .andExpect(status().isNoContent());
      * }
-     * 
+     *
      * @Test
      * void deleteGameById_shouldReturnNotFound() throws Exception {
      * Mockito.when(gameService.deleteById(2L)).thenReturn(false);
-     * 
+     *
      * mockMvc.perform(delete("/games/2"))
      * .andExpect(status().isNotFound());
      * }
