@@ -32,10 +32,6 @@ jobs:
       - name: unit tests & JaCoCo report
         run: game-service/mvnw package --file game-service/pom.xml
 
-  deploy-jacoco-report:
-    name: deploy JaCoCo report to Project website
-    runs-on: ubuntu-24.04
-    steps:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
