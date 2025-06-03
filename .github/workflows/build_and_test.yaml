@@ -41,11 +41,9 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-            # Upload the coverage directory from the repository
             path: './game-service/target/site/jacoco/'
       - name: Deploy JaCoCo report to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-            
   
 
