@@ -14,11 +14,19 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>games</name>
 	<description>Manage Games Data</description>
-	<url />
+	<url>https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one</url>
 	<licenses>
-		<license />
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
 	<developers>
+		<developer>
+			<name>Volker Benders</name>
+			<email>CWA.Coder.with.Attitude+dcgs@gmail.com</email>
+		</developer>
 		<developer />
 	</developers>
 	<scm>
