@@ -2,31 +2,31 @@
 Volker Benders
 :toc:
 :toc-title: Table of Contents
+:source-highlighter: rouge
+:docinfo: shared
 :imagesdir: ./images
 
-:description: DevContainer for Spring Boot development that gets you covered for all major challenges of building production grade REST services.
-:keywords: devcontainer, spring boot, rest api, production grade, monitoring, testing, persistence, mssql, prometheus, grafana, alertmanager, mailcatcher
+:description: Spring Boot DevContainer with postgres.
+:keywords: devcontainer, spring boot, rest api, testing, persistence, postgres
 :revnumber: 0.1.0
-:revdate: 2024-05-28
+:revdate: 2025-06-04
 
 == TL;DR
-DevContainer for Spring Boot development that gets you covered for all major challenges of building production grade REST services.
+DevContainer for Spring Boot & Postgres that gets you started with building production grade REST services.
 
 
 
 == What's inside?
-This is an opinionated devcontainer for building REST APIs with Spring Boot. It is not meant to be a complete solution for all use cases. It rather provides starting points tp get you started on all of challenges of building production grade REST services. If you have any suggestions or feedback, please let me know.
+This is an opinionated devcontainer for building REST APIs with Spring Boot. Setup ships with postgres persistence.
+It is not meant to be a complete solution for all use cases. It rather get you started.
+If you have any suggestions or feedback, please let me know.
 
 Let's have a look at the main components:
 
 * OpenJDK 21 
 * Spring Boot 3.5.0
 * Maven 3.9.9
-* MS SQL DB 2022
-* Prometheus
-* Grafana
-* Alertmanager
-* Mailcatcher
+* Postgres DB 2022
 * Adminer
 * JaCoCo
 * Bruno
@@ -40,10 +40,17 @@ For illustration I added an example REST-Service that manages data on games.
 This service exposes some technical metrics: JVM, Hibernate, Spring-Booot (Requests, Errors, etc.) and application specific metrics like the number of games in the database. 
 
 To assist your journey of building high quality web services:
-- the service exposes a self documenting API using OpenAPI aka Swagger. You can access the API documentation at http://localhost:8088/swagger-ui/index.html[http://localhost:8088/swagger-ui/index.html].
-- I added JaCoCo maven plugin. Each time you run `./mvnw package` the code coverage is calculated and stored in `target/site/jacoco/index.html`. Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.
-image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/what-the-heck/images/games-jacoco-report.png[JaCoCo Report]
-- basic build pipeline based on GitHub Actions is included. It runs the tests, builds the app and generates the JaCoCo report. The pipeline is triggered on every push to the main branch and on every pull request.
+
+- http://localhost:8088/swagger-ui/index.html[Swagger / Open-API info is exposed].
+
+- Mavens JaCoCo plugin generates code coverage reports each time run `./mvnw package`.
+The report is stored in `target/site/jacoco/index.html`. (Use the included https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer[Live server] extension to view the report in your browser.)
+
+image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/main/images/games-jacoco-report.png[]
+
+
+- Basic build pipeline based on GitHub Actions is included. It runs the tests, builds the app and generates the JaCoCo report.
+The JaCoCo-Report is published to the https://cwacoderwithattitude.github.io/dc-spring-boot-all-in-one/[project website]
 
 ==== Architecture Diagram
 
@@ -51,35 +58,29 @@ A picture is worth a thousand words. So let's have a look at the architecture di
 
 [source,mermaid]
 ....
-architecture-beta
-group games_service(cloud)[Games Service DevContainer]
-    service db(database)[Database] in games_service
-    service apiserver(server)[GamesAPI] in games_service
+flowchart TD
+    subgraph DevContainer: dc-games-service-postgres
+        direction TB
+        VSCode[VS Code<br/>]
+        GamesService[games-service<br/>Java 21, Maven, Node.js, npm, eslint]
+        Workspace[src workspace folder]
+        User[vscode user]
+    end
 
-    service prometheus(server)[Prometheus] in games_service
-    prometheus:L -- R:apiserver
-    db:R -- L:apiserver
-    service grafana(server)[Grafana] in games_service
-    service alert_manager(server)[Alertmanager] in games_service
-    
-    service mailcatcher(server)[Mailcatcher] in games_service
-    alert_manager:L -- R:mailcatcher
-    service adminer(server)[Adminer] in games_service
-    db:L -- R:adminer
-    prometheus:T -- B:grafana
-    alert_manager:T -- B:prometheus
-    service mssql_tools(server)[MSSQL_Tools]
-    db:T -- B:mssql_tools
-
-    service bruno(cloud)[Bruno]
-    apiserver:B -- B:bruno
-....
+    VSCode -- connects to --> GamesService
+    GamesService -- mounts --> Workspace
+    GamesService -- runs as --> User
+    GamesService -- postStartCommand --> Make[sb_run ]
+    GamesService -- tools --> Node[Node.js, npm, eslint]
+    GamesService -- tools --> Maven[Maven ]....
 
 === Testing
 
 I ship my examples with https://www.usebruno.com[Bruno] collections.
 
-Please find the collections in the `bruno` folder. You can import them into Bruno by clicking on the `+` icon in the top left corner and selecting `Import Collection`.
+Please find the ganes api collection in the `bruno` folder.
+
+You can import them into Bruno by clicking on the `+` icon in the top left corner and selecting `Import Collection`.
 
 There's a CLI tool to run collections, too:
 ```
@@ -117,7 +118,7 @@ Tests:       2 passed, 2 total
 Assertions:  6 passed, 6 total
 ```
 
-image::bruno-cli-report.png[Bruno CLI Report]
+image::images/bruno-cli-report.png[Bruno CLI Report]
 
 > I like Bruno - open source, local execution, no cloud services required. 
 Support for GUI and CLI. Excellent support for adding asserts and test to your requests.
@@ -129,30 +130,10 @@ This setup ships with an empty database. Using Bruno you can easily create items
 
 
 === Monitoring
-The devcontainer includes Prometheus, Grafana and Alertmanager to monitor your app.
-Never underestimate the importance of monitoring your app. It is crucial to know how your app is doing in production. This setup includes everything you need to get started to monitor your app and to be notified when something goes wrong.
 
-> For me gathering metrics & generating appropriate alerts is key to enable us to run a reliable platform. Dashboards are great to visualize the metrics, but alerts are crucial to be notified when something goes wrong. Dashboards should be build in a way that makes it easy to spot issues. Maybe even more important than just sending alerts it is imperative to send usefull alerts - and not too many of them to prevent alert fatigue.
+Never underestimate the importance of monitoring your app. It is crucial to know how your app is doing in production. For the sake of simplicity the demo app exposes default Spring Boot Actuator endpoints. This includes metrics, health, info and more.
 
-
-==== Prometheus
-is configured to scrape metrics from the app and from the host system
-
-==== Grafana
-is used to visualize the collected metrics. This setup ships with a preconfigured datasource connection to prometheus.
-You only need to add a dashboard to show Spring boot metrics. For starters you can try https://grafana.com/grafana/dashboards/19004-spring-boot-statistics/[dashboard 19004]:
-
-1. Open Grafana - default credentials are `admin`/`admin`: `.env` file contains the default password -> GF_SECURITY_ADMIN_PASSWORD.
-
-2. You can import this dashboard by clicking on the `+` icon in the left sidebar and selecting `Import`. Then paste the dashboard ID `19004` into the input field and click on `Load`. You can then select the Prometheus datasource and click on `Import`.
-
-==== Alertmanager
-is used to send notifications when an alert is triggered. Since you definitely want to be notified when your app is down or when something goes wrong, I added a simple alerting rule that will trigger an alert when the app is down. To keep it simple the alerts will be sent via email to a local mailtcatcher.
-image::https://github.com/CWACoderWithAttitude/dc-spring-boot-all-in-one/blob/main/images/mailcatcher-alert-messages.png[Mailcatcher Alert Messages]
-
-==== Mailcatcher
-can be reached at http://localhost:1080/[http://localhost:1080] (You can test the email notification by sending a test email to the configured SMTP server.)
-This is an app that accepts SMTP mail connections.Received mails are shown in a web gui. This is a great way to test email notifications without having to set up a real SMTP server.
+Processing, rendering or gathering metrics is out of scope of this example.
 
 === DB Frontend
 
@@ -160,61 +141,38 @@ To make is as easy for you as possible i included difffent ways to peek into the
 
 === GUI
 
-Adminer is a web based DB management tool that can be used to manage your database. It can be reached at http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010]. Please lookup the DB password fron file://.devcontainer/.env[.env] file - look out for property `mssql_sa_password`.
+Adminer is a web based DB management tool that can be used to manage your database. It can be reached at http://localhost:8010/?pgsql=db.local&username=postgres&db=postgres&ns=public&table=game[http://localhost:8010 > DB Adminer]. Please lookup the DB password fron file://.devcontainer/.env[.env] file.
 
-=== CLI
-
-In case you prefer CLI I included `mssql-tools`:
-
-> The DB password for the `sa` user is stored in the `.env` file as `mssql_sa_password`. It's injected into the mssql-tools container in docker-compoose as `MSSQL_PASSWORD`.
-
-```bash
-docker exec -it mssql.local /bin/bash
-root@2f8bd524f7bf:/# sqlcmd -S mssql.local -U sa -P ${MSSQL_PASSWORD}
-1> SELECT name FROM master.dbo.sysdatabases
-2> go
-name
------
-master
-tempdb
-model
-msdb
-
-(4 rows affected)
-1> USE msdb
-2> go
-Changed database context to 'msdb'.
-
-1> SELECT top 5 id, title, ean13 FROM dbo.game WHERE title != "" and ean13 != ""
-2> go
-id      title              ean13
---------------------------
-34 Catan, Das Würfelspiel 4002051699093
-52 Catan, Das Würfelspiel 4002051699093
-53 Catan, Das Würfelspiel 4002051699093
-54 Catan, Das Würfelspiel 4002051699093
-
-(4 rows affected)
-```
+[%linenums,ruby,highlight=5..6]
+----
+include::.devcontainer/.env[]
+----
 
 
-=== Why?
-When developing a REST API you need to think about a lot of things. You need to think about how to test your code, how to monitor it, how to deploy it and how to make sure it runs in a container. This is a lot of stuff to think about. So I thought it would be a good idea to build a full blown REST API that covers all these topics. The goal is to show you how to do all this stuff in a simple way. The goal is not to build the best API ever. 
+=== Why DevContainer?
+When developing a REST API you need to think about a lot of things.
+
+You need to think about how to implement and test your code. And make sure it runs in a container.
+
+This is a lot of stuff to think about. So I thought it would be a good idea to build a full blown REST API that covers all these topics. The goal is to show you how to do all this stuff in a simple way. The goal is not to build the best API ever. 
+
+==== Works on my machine!
+
+We all "know"this is a bad slogan. But what if "works on my machine" simply means: great - ship it. What if we could turn "works on my machine" into "works in a container"? An envirnment that is consistent regardless of the host system.
 
 === Why devcontainers?
-We all know "Works on my machine" is a bad slogan. What if "works on my machine" simply means: great - ship it. What if we could turn "works on my machine" into "works in a container"? An envirnment that is consistent regardless of the host system.
-I want to show you why we should embrace the slogan "It works on my machine". Using devcontainers it is easy to build your product in an environment that's pretty close to your prod env. Let's face it - we all have different machines and different setups. When using containers starting from day one you can be suree 
+I want to show you why we should embrace the slogan "It works on my machine". Using devcontainers it is easy to build a product in an environment that's pretty close to your prod env.
+
+
+
+Let's face it - we all have different machines and different setups. When using containers starting from day one you can be suree 
 
 == Project Links
 
 [cols="5,1"]  
 |===
 | http://localhost:8088/swagger-ui/index.html[OpenAPI aka Swagger] ^| OK
-| http://localhost:8010/?mssql=mssql.local&username=sa&db=msdb&ns=dbo[http://localhost:8010] DB Admin Frontend ^| OK
-| http://localhost:8090/targets[Prometheus Targets] Check scraping metrics from endpoints is healthy ^| OK 
-| http://localhost:8030/?orgId=1&from=now-6h&to=now&timezone=browser[Grafana] Visualize Metrics ^| OK
-| http://localhost:8093/#/alerts[AlertManager] ^| OK
-| http://localhost:1080[Mailcatcher - Fake SMTP] Apps may send SMTP Mails to Pot 1025 ^| OK
+| http://localhost:8010/?pgsql=db.local&username=postgres&db=postgres&ns=public&table=game[Adminer > DB Web Admin Frontend] ^| OK
 |=== 
 
 == ToDos
@@ -223,7 +181,7 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
   * [ ] - [.line-through]#https://prometheus.io/docs/alerting/latest/alertmanager/[AlertManager]#  and 
   * [ ] - https://grafana.com/docs/grafana/latest/alerting/notifications/[Grafana Alerting] and
   * [ ] - [.line-through]#https://blog.devops.dev/send-email-alerts-using-prometheus-alert-manager-16df870144a4[Send email alerts using Prometheus Alert Manager]#
-- [ ] - publish JaCoCo Report 
+- [x] - publish JaCoCo Report 
 - [ ] - Integrate Keycloak for authentication and authorization
 - [ ] - Run app on Firebase
 - [ ] - Deploy app on AWS using CDK and AWS Lambda
@@ -243,13 +201,13 @@ I want to show you why we should embrace the slogan "It works on my machine". Us
 - https://medium.com/@AlexanderObregon/how-spring-boot-maps-environment-variables-to-configuration-properties-2ddc55e361ca[How Spring Boot Maps Environment Variables to Configuration Properties]
 - https://medium.com/simform-engineering/testing-spring-boot-applications-best-practices-and-frameworks-6294e1068516[Testing Spring Boot Applications: Best Practices and Frameworks]
 - https://www.baeldung.com/spring-boot-mssql[Spring Boot with MS SQL]
-=== Monitoring
-_ https://prometheus.io/docs/introduction/overview/[Prometheus Overview]
-- https://prometheus.io/docs/alerting/latest/alertmanager/[Alertmanager]
 
 === Writing
 
 Documenation is provided in Asciidoc format.
+
+> The Makefile in the root folder contains targets to convert asciidoc to markdown.
+
 - https://asciidoctor.org/docs/user-manual/[Asciidoctor User Manual]
 - https://docs.asciidoctor.org/diagram-extension/latest/diagrams/[Asciidoctor Diagram Extension]
 - https://gist.github.com/plamentotev/be495e81abd52dc10e7dd51fbb71dd8c/revisions[Asciidoctor Diagram - Ditaa, PlantUML, Graphviz, Mermaid, etc.]
@@ -260,3 +218,7 @@ Documenation is provided in Asciidoc format.
 - https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-graphviz[Creating diagrams with Graphviz]
 - https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams-with-asciidoctor-diagram[Creating diagrams with Asciidoctor Diagram]
 
+[ditaa]
+...
+
+...
