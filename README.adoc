@@ -72,8 +72,9 @@ flowchart TD
     GamesService -- runs as --> User
     GamesService -- postStartCommand --> Make[sb_run ]
     GamesService -- tools --> Node[Node.js, npm, eslint]
-    GamesService -- tools --> Maven[Maven ]....
-...
+    GamesService -- tools --> Maven[Maven ]
+....
+
 
 === Testing
 
